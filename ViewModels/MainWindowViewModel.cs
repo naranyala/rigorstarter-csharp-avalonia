@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using RigorStarter.Utilities;
 
 namespace RigorStarter.ViewModels;
 
@@ -47,7 +48,28 @@ public partial class MainWindowViewModel : ObservableObject
             Name = "Network Utility", 
             Description = "System network information utility", 
             IsUtility = true, 
-            Content = "public static class NetworkUtility\n{\n    public static string GetNetworkSummary()\n    {\n        // Implementation in Utilities/NetworkUtility.cs\n    }\n}" 
+            SourceCode = "public static string GetNetworkSummary()\n{\n    var interfaces = NetworkInterface.GetAllNetworkInterfaces();\n    // ... implementation in NetworkUtility.cs\n}" 
+        });
+        SearchItems.Add(new SearchItemViewModel 
+        { 
+            Name = "Disk Utility", 
+            Description = "Storage and drive space summary", 
+            IsUtility = true, 
+            SourceCode = "public static string GetDiskSummary()\n{\n    var drives = DriveInfo.GetDrives();\n    // ... implementation in DiskUtility.cs\n}" 
+        });
+        SearchItems.Add(new SearchItemViewModel 
+        { 
+            Name = "System Info Utility", 
+            Description = "OS and hardware specifications", 
+            IsUtility = true, 
+            SourceCode = "public static string GetSystemSummary()\n{\n    return $\"OS: {RuntimeInformation.OSDescription}\";\n    // ... implementation in SystemInfoUtility.cs\n}" 
+        });
+        SearchItems.Add(new SearchItemViewModel 
+        { 
+            Name = "Process Utility", 
+            Description = "Top memory-consuming processes", 
+            IsUtility = true, 
+            SourceCode = "public static string GetTopProcesses()\n{\n    var processes = Process.GetProcesses().OrderByDescending(p => p.WorkingSet64).Take(10);\n    // ... implementation in ProcessUtility.cs\n}" 
         });
 
         AccordionItems.Add(new AccordionItemViewModel { Header = "Section 1", Content = "This is the content for section 1. It can be any text or even other controls!", IsExpanded = true });
@@ -70,6 +92,19 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private void SelectItem(SearchItemViewModel item)
     {
+        if (item.IsUtility)
+        {
+            UtilityResult result = item.Name switch
+            {
+                "Network Utility" => NetworkUtility.GetNetworkSummary(),
+                "Disk Utility" => DiskUtility.GetDiskSummary(),
+                "System Info Utility" => SystemInfoUtility.GetSystemSummary(),
+                "Process Utility" => ProcessUtility.GetTopProcesses(),
+                _ => new UtilityResult(false, "Unknown Utility", null)
+            };
+            item.ExecutionResult = result;
+        }
+
         SelectedItem = item;
         IsSearchPanelOpen = false;
         OnPropertyChanged(nameof(IsAccordionSelected));

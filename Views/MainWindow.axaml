@@ -55,17 +55,35 @@
                             <comp:Drawer IsVisible="{Binding IsDrawerSelected}" />
                             
                             <Border IsVisible="{Binding IsUtilitySelected}" 
-                                    Background="#F0F0F0" 
+                                    Background="White" 
                                     CornerRadius="5" 
                                     Padding="15" 
                                     BorderBrush="#DDD" 
                                     BorderThickness="1">
-                                <StackPanel Spacing="10">
-                                    <TextBlock Text="System Utility Code" FontWeight="Bold" Foreground="#555" />
-                                    <TextBlock Text="{Binding SelectedItem.Content}" 
-                                               FontFamily="Courier New" 
-                                               FontSize="13" 
-                                               TextWrapping="Wrap" />
+                                <StackPanel Spacing="15">
+                                    <StackPanel Spacing="5">
+                                        <TextBlock Text="Source Code" FontWeight="Bold" Foreground="#555" />
+                                        <Border Background="#F8F9FA" CornerRadius="4" Padding="10" BorderBrush="#EEE" BorderThickness="1">
+                                            <TextBlock Text="{Binding SelectedItem.SourceCode}" 
+                                                       FontFamily="Courier New" 
+                                                       FontSize="12" 
+                                                       TextWrapping="Wrap" 
+                                                       Foreground="#333" />
+                                        </Border>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Spacing="5">
+                                        <TextBlock Text="Execution Result" FontWeight="Bold" Foreground="#555" />
+                                        <Border Background="{Binding SelectedItem.ResultIsSuccess, Converter={StaticResource SuccessToColorConverter}}" 
+                                                BorderBrush="{Binding SelectedItem.ResultIsSuccess, Converter={StaticResource SuccessToBorderConverter}}"
+                                                CornerRadius="4" Padding="10" BorderThickness="1">
+                                            <TextBlock Text="{Binding SelectedItem.ResultText}" 
+                                                       FontFamily="Courier New" 
+                                                       FontSize="12" 
+                                                       TextWrapping="Wrap" 
+                                                       Foreground="{Binding SelectedItem.ResultIsSuccess, Converter={StaticResource SuccessToTextConverter}}" />
+                                        </Border>
+                                    </StackPanel>
                                 </StackPanel>
                             </Border>
                             
@@ -94,15 +112,15 @@
                         MaxHeight="500"
                         BoxShadow="0 4 10 0 #40000000">
                     <StackPanel Spacing="10" Margin="15">
-                        <Grid ColumnDefinitions="*, Auto">
-                            <TextBox Text="{Binding SearchText, Mode=TwoWay}" 
-                                     Watermark="Search items..." 
-                                     VerticalAlignment="Center"/>
-                            <Button Grid.Column="1" 
-                                    Content="Close" 
-                                    Command="{Binding ToggleSearchCommand}"
-                                    Margin="10,0,0,0"/>
-                        </Grid>
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <TextBox Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay}" 
+                                             Watermark="Search items..." 
+                                             VerticalAlignment="Center"/>
+                                    <Button Grid.Column="1" 
+                                            Content="Close" 
+                                            Command="{Binding ToggleSearchCommand}"
+                                            Margin="10,0,0,0"/>
+                                </Grid>
                         
                         <Separator />
                         

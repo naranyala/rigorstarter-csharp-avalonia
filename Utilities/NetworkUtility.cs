@@ -7,7 +7,7 @@ namespace RigorStarter.Utilities;
 
 public static class NetworkUtility
 {
-    public static string GetNetworkSummary()
+    public static UtilityResult GetNetworkSummary()
     {
         try
         {
@@ -27,13 +27,15 @@ public static class NetworkUtility
                 }
             }
             
-            return summary.Count > 0 
+            string result = summary.Count > 0 
                 ? string.Join("\n", summary) 
                 : "No active network interfaces found.";
+                
+            return new UtilityResult(true, result);
         }
         catch (Exception ex)
         {
-            return $"Error retrieving network info: {ex.Message}";
+            return new UtilityResult(false, "Failed to retrieve network information", ex.Message);
         }
     }
 }

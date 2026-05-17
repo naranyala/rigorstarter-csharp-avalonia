@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using RigorStarter.Utilities;
 
 namespace RigorStarter.ViewModels;
 
@@ -19,7 +20,12 @@ public partial class SearchItemViewModel : ObservableObject
     [ObservableProperty]
     private bool _isMockup;
 
-    // For Utilities: The actual code or output
     [ObservableProperty]
-    private string _content = string.Empty;
+    private string _sourceCode = string.Empty;
+
+    [ObservableProperty]
+    private UtilityResult? _executionResult;
+
+    public string ResultText => ExecutionResult?.Message ?? string.Empty;
+    public bool ResultIsSuccess => ExecutionResult?.IsSuccess ?? true;
 }
