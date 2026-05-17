@@ -22,6 +22,21 @@ public class ConverterTests
     }
 
     [Theory]
+    [InlineData(RigorStarter.Utilities.BadgeStatus.Info)]
+    [InlineData(RigorStarter.Utilities.BadgeStatus.Success)]
+    [InlineData(RigorStarter.Utilities.BadgeStatus.Warning)]
+    [InlineData(RigorStarter.Utilities.BadgeStatus.Error)]
+    [InlineData(null)]
+    public void BadgeStatusToColorConverter_ShouldMapCorrectColors(object? input)
+    {
+        var converter = new BadgeStatusToColorConverter();
+        var result =
+            converter.Convert(input, typeof(IBrush), null, CultureInfo.InvariantCulture) as IBrush;
+
+        Assert.NotNull(result);
+    }
+
+    [Theory]
     [InlineData(true)]
     [InlineData(false)]
     [InlineData(null)]

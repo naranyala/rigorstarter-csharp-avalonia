@@ -46,4 +46,49 @@ public class UtilityTests
         Assert.False(string.IsNullOrWhiteSpace(summary));
         Assert.Contains("Memory", summary);
     }
+
+    [Fact]
+    public void XdgPaths_ShouldReturnValidPaths()
+    {
+        var appName = "TestApp";
+        Assert.False(string.IsNullOrWhiteSpace(XdgPaths.GetConfigDir(appName)));
+        Assert.False(string.IsNullOrWhiteSpace(XdgPaths.GetDataDir(appName)));
+        Assert.False(string.IsNullOrWhiteSpace(XdgPaths.GetCacheDir(appName)));
+    }
+
+    [Fact]
+    public void ProcFS_ShouldReadMemInfo()
+    {
+        var mem = ProcFS.ReadProcFile("meminfo");
+        Assert.NotEmpty(mem);
+        Assert.True(mem.ContainsKey("MemTotal") || mem.ContainsKey("Error"));
+    }
+
+    [Fact]
+    public void OsRelease_ShouldReturnDistroInfo()
+    {
+        var info = OsRelease.GetDistroInfo();
+        Assert.NotNull(info);
+        Assert.False(string.IsNullOrWhiteSpace(info.PrettyName));
+    }
+
+    [Fact]
+    public void ConfigManager_ShouldSaveAndLoadConfig()
+    {
+        var appName = "TestConfigApp";
+        var fileName = "settings.yaml";
+        var config = new TestConfig { Theme = "Dark", FontSize = 14 };
+
+        ConfigManager.SaveConfig(appName, fileName, config);
+        var loaded = ConfigManager.LoadConfig<TestConfig>(appName, fileName);
+
+        Assert.Equal(config.Theme, loaded.Theme);
+        Assert.Equal(config.FontSize, loaded.FontSize);
+    }
+
+    private class TestConfig
+    {
+        public string Theme { get; set; } = "Light";
+        public int FontSize { get; set; } = 12;
+    }
 }

@@ -49,6 +49,25 @@ public class ViewModelTests
         Assert.True(vm.IsAnyItemSelected);
     }
 
+    [Theory]
+    [InlineData("StatusBadge", nameof(MainWindowViewModel.IsStatusBadgeSelected))]
+    [InlineData("MetricCard", nameof(MainWindowViewModel.IsMetricCardSelected))]
+    public void NewComponents_ShouldUpdateSelectionProperties(
+        string componentName,
+        string propertyName
+    )
+    {
+        var vm = new MainWindowViewModel();
+        var item = vm.SearchItems.First(i => i.Name == componentName);
+
+        vm.SelectItemCommand.Execute(item);
+
+        var property = typeof(MainWindowViewModel).GetProperty(propertyName);
+        var value = (bool)property.GetValue(vm);
+
+        Assert.True(value);
+    }
+
     [Fact]
     public void GoToDashboard_ShouldResetAllSelectionStates()
     {

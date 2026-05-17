@@ -25,6 +25,12 @@ public class DataServiceTests
         Assert.NotEmpty(dev);
         Assert.NotEmpty(archives);
         Assert.NotEmpty(accordion);
+
+        // Verify new components are registered
+        Assert.Contains(searchItems, i => i.Name == "StatusBadge");
+        Assert.Contains(searchItems, i => i.Name == "MetricCard");
+        Assert.Contains(dev, i => i.Name == "StatusBadge");
+        Assert.Contains(dev, i => i.Name == "MetricCard");
     }
 
     [Fact]

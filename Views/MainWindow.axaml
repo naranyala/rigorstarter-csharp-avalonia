@@ -102,6 +102,8 @@
                         <comp:Card IsVisible="{Binding IsCardSelected}" />
                         <comp:Button IsVisible="{Binding IsButtonSelected}" />
                         <comp:Tabs IsVisible="{Binding IsTabsSelected}" />
+                        <comp:StatusBadge IsVisible="{Binding IsStatusBadgeSelected}" />
+                        <comp:MetricCard IsVisible="{Binding IsMetricCardSelected}" />
                         
                         <Border IsVisible="{Binding IsUtilitySelected}" 
                                 Background="White" 

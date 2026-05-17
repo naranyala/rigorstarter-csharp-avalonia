@@ -28,6 +28,8 @@ public partial class MainWindowViewModel : ObservableObject
     public bool IsCardSelected => SelectedItem?.Name == "Card";
     public bool IsButtonSelected => SelectedItem?.Name == "Button";
     public bool IsTabsSelected => SelectedItem?.Name == "Tabs";
+    public bool IsStatusBadgeSelected => SelectedItem?.Name == "StatusBadge";
+    public bool IsMetricCardSelected => SelectedItem?.Name == "MetricCard";
     public bool IsUtilitySelected => SelectedItem?.IsUtility ?? false;
     public bool IsMockupSelected => SelectedItem?.IsMockup ?? false;
     public bool IsAnyItemSelected => SelectedItem != null;
@@ -79,6 +81,8 @@ public partial class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(IsCardSelected));
         OnPropertyChanged(nameof(IsButtonSelected));
         OnPropertyChanged(nameof(IsTabsSelected));
+        OnPropertyChanged(nameof(IsStatusBadgeSelected));
+        OnPropertyChanged(nameof(IsMetricCardSelected));
         OnPropertyChanged(nameof(IsUtilitySelected));
         OnPropertyChanged(nameof(IsMockupSelected));
         OnPropertyChanged(nameof(IsAnyItemSelected));
@@ -93,6 +97,8 @@ public partial class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(IsCardSelected));
         OnPropertyChanged(nameof(IsButtonSelected));
         OnPropertyChanged(nameof(IsTabsSelected));
+        OnPropertyChanged(nameof(IsStatusBadgeSelected));
+        OnPropertyChanged(nameof(IsMetricCardSelected));
         OnPropertyChanged(nameof(IsUtilitySelected));
         OnPropertyChanged(nameof(IsMockupSelected));
         OnPropertyChanged(nameof(IsAnyItemSelected));

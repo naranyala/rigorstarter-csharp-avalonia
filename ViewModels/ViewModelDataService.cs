@@ -77,6 +77,28 @@ public class ViewModelDataService
             pinnedItems,
             inDevelopmentItems,
             archivesItems,
+            "StatusBadge",
+            "A small indicator for status states",
+            ComponentCategory.InDevelopment,
+            "Components/StatusBadge.axaml",
+            "Components/StatusBadge.axaml.cs"
+        );
+        AddComponent(
+            searchItems,
+            pinnedItems,
+            inDevelopmentItems,
+            archivesItems,
+            "MetricCard",
+            "A card displaying key performance indicators",
+            ComponentCategory.InDevelopment,
+            "Components/MetricCard.axaml",
+            "Components/MetricCard.axaml.cs"
+        );
+        AddComponent(
+            searchItems,
+            pinnedItems,
+            inDevelopmentItems,
+            archivesItems,
             "DataGrid",
             "A powerful table for data display",
             ComponentCategory.InDevelopment,

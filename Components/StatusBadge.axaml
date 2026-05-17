@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="clr-namespace:RigorStarter.Converters"
+             xmlns:comp="clr-namespace:RigorStarter.Components"
+             x:Class="RigorStarter.Components.StatusBadge"
+             x:DataType="comp:StatusBadge">
+    <UserControl.Resources>
+        <conv:BadgeStatusToColorConverter x:Key="StatusToColorConverter" />
+    </UserControl.Resources>
+    
+    <Border Background="{Binding Status, Converter={StaticResource StatusToColorConverter}}" 
+            CornerRadius="12" 
+            Padding="8,2" 
+            HorizontalAlignment="Left" 
+            VerticalAlignment="Center">
+        <TextBlock Text="{Binding Status}" 
+                   FontSize="12" 
+                   FontWeight="Medium" 
+                   Foreground="Black" 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Center"/>
+    </Border>
+</UserControl>

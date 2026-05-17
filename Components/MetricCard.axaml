@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:comp="clr-namespace:RigorStarter.Components"
+             xmlns:vm="using:RigorStarter.ViewModels"
+             x:Class="RigorStarter.Components.MetricCard"
+             x:DataType="vm:MetricCardViewModel">
+    <Border Background="White" CornerRadius="8" Padding="15" BorderBrush="#DDD" BorderThickness="1">
+        <StackPanel Spacing="10">
+            <DockPanel>
+                <TextBlock Text="{Binding Title}" FontSize="14" FontWeight="Medium" Foreground="Gray" DockPanel.Dock="Left"/>
+                <comp:StatusBadge Status="{Binding Status}" DockPanel.Dock="Right"/>
+            </DockPanel>
+            <TextBlock Text="{Binding Value}" FontSize="24" FontWeight="Bold" Foreground="Black" />
+            <TextBlock Text="{Binding Trend}" FontSize="12" Foreground="Green" FontWeight="SemiBold" />
+        </StackPanel>
+    </Border>
+</UserControl>
