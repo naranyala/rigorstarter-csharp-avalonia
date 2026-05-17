@@ -5,9 +5,35 @@
              RequestedThemeVariant="Light">
     
     <Application.Resources>
-        <conv:SuccessToColorConverter x:Key="SuccessToColorConverter"/>
-        <conv:SuccessToBorderConverter x:Key="SuccessToBorderConverter"/>
-        <conv:SuccessToTextConverter x:Key="SuccessToTextConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="AppBackground">#F8F9FA</SolidColorBrush>
+                    <SolidColorBrush x:Key="SurfaceBackground">White</SolidColorBrush>
+                    <SolidColorBrush x:Key="BorderBrush">#DDD</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryText">#333</SolidColorBrush>
+                    <SolidColorBrush x:Key="SecondaryText">Gray</SolidColorBrush>
+                    <SolidColorBrush x:Key="SuccessBackground">#F0FDF4</SolidColorBrush>
+                    <SolidColorBrush x:Key="SuccessBorder">#BBF7D0</SolidColorBrush>
+                    <SolidColorBrush x:Key="SuccessText">#166534</SolidColorBrush>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="AppBackground">#121212</SolidColorBrush>
+                    <SolidColorBrush x:Key="SurfaceBackground">#1E1E1E</SolidColorBrush>
+                    <SolidColorBrush x:Key="BorderBrush">#333</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryText">#E0E0E0</SolidColorBrush>
+                    <SolidColorBrush x:Key="SecondaryText">#AAAAAA</SolidColorBrush>
+                    <SolidColorBrush x:Key="SuccessBackground">#064E3B</SolidColorBrush>
+                    <SolidColorBrush x:Key="SuccessBorder">#065F46</SolidColorBrush>
+                    <SolidColorBrush x:Key="SuccessText">#A7F3D0</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            
+            <conv:SuccessToColorConverter x:Key="SuccessToColorConverter"/>
+            <conv:SuccessToBorderConverter x:Key="SuccessToBorderConverter"/>
+            <conv:SuccessToTextConverter x:Key="SuccessToTextConverter"/>
+            <conv:ThemeIconConverter x:Key="ThemeIconConverter"/>
+        </ResourceDictionary>
     </Application.Resources>
 
     <Application.Styles>

@@ -14,7 +14,7 @@
 
     <Grid RowDefinitions="Auto, *">
         <!-- Top Navbar -->
-        <Border Grid.Row="0" Background="#F8F9FA" BorderBrush="#DDD" BorderThickness="0,0,0,1" Padding="15">
+        <Border Grid.Row="0" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="15">
             <Grid ColumnDefinitions="*, Auto">
                 <Button Command="{Binding GoToDashboardCommand}" 
                         Background="Transparent" 
@@ -22,17 +22,24 @@
                         HorizontalAlignment="Left" 
                         VerticalAlignment="Center">
                     <TextBlock Text="RigorStarter App" 
-                               Foreground="#333" 
+                               Foreground="{DynamicResource PrimaryText}" 
                                FontSize="20" 
                                FontWeight="Bold" />
                 </Button>
                 
-                <Button Grid.Column="1" 
-                        Content="🔍 Search" 
-                        Command="{Binding ToggleSearchCommand}"
-                        Background="Transparent"
-                        Foreground="#333"
-                        BorderThickness="0"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                    <Button Content="🔍 Search" 
+                            Command="{Binding ToggleSearchCommand}"
+                            Background="Transparent"
+                            Foreground="{DynamicResource PrimaryText}"
+                            BorderThickness="0"/>
+                    
+                    <Button Content="{Binding IsDarkTheme, Converter={StaticResource ThemeIconConverter}}" 
+                            Command="{Binding ToggleThemeCommand}"
+                            Background="Transparent"
+                            Foreground="{DynamicResource PrimaryText}"
+                            BorderThickness="0"/>
+                </StackPanel>
             </Grid>
         </Border>
 
@@ -57,8 +64,8 @@
                                 <DataTemplate x:DataType="vm:SearchItemViewModel">
                                     <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,2">
                                         <TextBlock Text="{Binding Name}" FontWeight="Medium" />
-                                        <TextBlock Text="|" Foreground="LightGray" />
-                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="Gray" FontSize="12" />
+                                        <TextBlock Text="|" Foreground="{DynamicResource SecondaryText}" />
+                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="{DynamicResource SecondaryText}" FontSize="12" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -72,8 +79,8 @@
                                 <DataTemplate x:DataType="vm:SearchItemViewModel">
                                     <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,2">
                                         <TextBlock Text="{Binding Name}" FontWeight="Medium" />
-                                        <TextBlock Text="|" Foreground="LightGray" />
-                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="Gray" FontSize="12" />
+                                        <TextBlock Text="|" Foreground="{DynamicResource SecondaryText}" />
+                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="{DynamicResource SecondaryText}" FontSize="12" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -87,8 +94,8 @@
                                 <DataTemplate x:DataType="vm:SearchItemViewModel">
                                     <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,2">
                                         <TextBlock Text="{Binding Name}" FontWeight="Medium" />
-                                        <TextBlock Text="|" Foreground="LightGray" />
-                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="Gray" FontSize="12" />
+                                        <TextBlock Text="|" Foreground="{DynamicResource SecondaryText}" />
+                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="{DynamicResource SecondaryText}" FontSize="12" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -102,34 +109,33 @@
                         <comp:Card IsVisible="{Binding IsCardSelected}" />
                         <comp:Button IsVisible="{Binding IsButtonSelected}" />
                         <comp:Tabs IsVisible="{Binding IsTabsSelected}" />
-                        <comp:StatusBadge IsVisible="{Binding IsStatusBadgeSelected}" />
                         <comp:MetricCard IsVisible="{Binding IsMetricCardSelected}" />
                         
                         <Border IsVisible="{Binding IsUtilitySelected}" 
-                                Background="White" 
+                                Background="{DynamicResource SurfaceBackground}" 
                                 CornerRadius="5" 
                                 Padding="15" 
-                                BorderBrush="#DDD" 
+                                BorderBrush="{DynamicResource BorderBrush}" 
                                 BorderThickness="1">
                             <StackPanel Spacing="15">
                                 <StackPanel Spacing="5">
-                                    <TextBlock Text="Source Code" FontWeight="Bold" Foreground="#555" />
-                                    <Border Background="#F8F9FA" CornerRadius="4" Padding="10" BorderBrush="#EEE" BorderThickness="1">
+                                    <TextBlock Text="Source Code" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" />
+                                    <Border Background="{DynamicResource AppBackground}" CornerRadius="4" Padding="10" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
                                         <TextBlock Text="{Binding SelectedItem.SourceCode}" 
                                                    FontFamily="Courier New" 
                                                    FontSize="12" 
                                                    TextWrapping="Wrap" 
-                                                   Foreground="#333" />
+                                                   Foreground="{DynamicResource PrimaryText}" />
                                     </Border>
                                 </StackPanel>
                                 
                                 <StackPanel Spacing="5">
-                                    <TextBlock Text="Execution Result" FontWeight="Bold" Foreground="#555" />
+                                    <TextBlock Text="Execution Result" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" />
                                     <Border CornerRadius="4" Padding="10" BorderThickness="1">
                                         <Border.Styles>
                                             <Style Selector="Border">
-                                                <Setter Property="Background" Value="#F0FDF4"/>
-                                                <Setter Property="BorderBrush" Value="#BBF7D0"/>
+                                                <Setter Property="Background" Value="{DynamicResource SuccessBackground}"/>
+                                                <Setter Property="BorderBrush" Value="{DynamicResource SuccessBorder}"/>
                                             </Style>
                                             <Style Selector="Border[IsVisible=False]">
                                                 <Setter Property="Background" Value="Transparent"/>
@@ -140,7 +146,7 @@
                                                    FontFamily="Courier New" 
                                                    FontSize="12" 
                                                    TextWrapping="Wrap" 
-                                                   Foreground="#166534" />
+                                                   Foreground="{DynamicResource SuccessText}" />
                                     </Border>
                                 </StackPanel>
                             </StackPanel>
@@ -148,7 +154,7 @@
 
                         <TextBlock Text="This component is still in development!" 
                                    FontSize="16" 
-                                   Foreground="Gray" 
+                                   Foreground="{DynamicResource SecondaryText}" 
                                    HorizontalAlignment="Center" 
                                    IsVisible="{Binding IsMockupSelected}"
                                    Margin="0,20,0,0"
@@ -163,7 +169,7 @@
                 <Border Background="#80000000" />
                 
                 <!-- Search Panel -->
-                <Border Background="White" 
+                <Border Background="{DynamicResource SurfaceBackground}" 
                         CornerRadius="8"
                         Margin="50"
                         VerticalAlignment="Top"
@@ -192,7 +198,7 @@
                                                 Background="Transparent" 
                                                 BorderThickness="0" 
                                                 HorizontalAlignment="Stretch">
-                                            <Border BorderBrush="#EEE" BorderThickness="0,0,0,1" Padding="5">
+                                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="5">
                                                 <StackPanel>
                                                     <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                                                     <TextBlock Text="{Binding Description}" FontSize="12" TextWrapping="Wrap" />

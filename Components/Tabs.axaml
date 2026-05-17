@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="RigorStarter.Components.Tabs">
-    <Border Background="White" CornerRadius="8" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+    <Border Background="{DynamicResource SurfaceBackground}" CornerRadius="8" Padding="10" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
         <StackPanel Spacing="15">
             <TextBlock Text="Tabs Component" FontSize="18" FontWeight="Bold" />
             
@@ -10,7 +10,7 @@
                     <StackPanel Spacing="10" Margin="0,10,0,0">
                         <TextBlock Text="General Settings" FontWeight="SemiBold" />
                         <TextBlock Text="This tab contains the general configuration options for the component." 
-                                   Foreground="Gray" TextWrapping="Wrap" />
+                                   Foreground="{DynamicResource SecondaryText}" TextWrapping="Wrap" />
                         <CheckBox Content="Enable Notifications" IsChecked="True" />
                         <CheckBox Content="Auto-save changes" IsChecked="False" />
                     </StackPanel>

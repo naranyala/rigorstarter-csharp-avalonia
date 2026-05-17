@@ -7,8 +7,8 @@
                 Click="ToggleBtn_Click" />
         
         <Border Name="DrawerPanel" 
-                Background="#F5F5F5" 
-                BorderBrush="#CCC" 
+                Background="{DynamicResource SurfaceBackground}" 
+                BorderBrush="{DynamicResource BorderBrush}" 
                 BorderThickness="0,2,0,0"
                 CornerRadius="15,15,0,0"
                 VerticalAlignment="Bottom" 

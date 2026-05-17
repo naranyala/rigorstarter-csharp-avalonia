@@ -16,7 +16,7 @@
         <TextBlock Text="{Binding Status}" 
                    FontSize="12" 
                    FontWeight="Medium" 
-                   Foreground="Black" 
+                   Foreground="{DynamicResource PrimaryText}" 
                    VerticalAlignment="Center" 
                    HorizontalAlignment="Center"/>
     </Border>

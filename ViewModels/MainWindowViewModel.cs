@@ -1,6 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RigorStarter.Utilities;
@@ -11,6 +13,9 @@ public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty]
     private bool _isSearchPanelOpen;
+
+    [ObservableProperty]
+    private bool _isDarkTheme;
 
     [ObservableProperty]
     private string _searchText = string.Empty;
@@ -64,6 +69,15 @@ public partial class MainWindowViewModel : ObservableObject
         {
             SearchText = string.Empty;
         }
+    }
+
+    [RelayCommand]
+    private void ToggleTheme()
+    {
+        IsDarkTheme = !IsDarkTheme;
+        Application.Current!.RequestedThemeVariant = IsDarkTheme
+            ? ThemeVariant.Dark
+            : ThemeVariant.Light;
     }
 
     [RelayCommand]

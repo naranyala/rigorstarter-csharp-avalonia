@@ -8,7 +8,7 @@ namespace RigorStarter.Converters;
 
 public class BadgeStatusToColorConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is BadgeStatus status)
         {
@@ -24,7 +24,12 @@ public class BadgeStatusToColorConverter : IValueConverter
         return Brushes.LightGray;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         throw new NotImplementedException();
     }
