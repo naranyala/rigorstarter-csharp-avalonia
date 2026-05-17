@@ -101,6 +101,7 @@
                         <comp:Drawer IsVisible="{Binding IsDrawerSelected}" />
                         <comp:Card IsVisible="{Binding IsCardSelected}" />
                         <comp:Button IsVisible="{Binding IsButtonSelected}" />
+                        <comp:Tabs IsVisible="{Binding IsTabsSelected}" />
                         
                         <Border IsVisible="{Binding IsUtilitySelected}" 
                                 Background="White" 

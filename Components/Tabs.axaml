@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="RigorStarter.Components.Tabs">
+    <Border Background="White" CornerRadius="8" Padding="10" BorderBrush="#DDD" BorderThickness="1">
+        <StackPanel Spacing="15">
+            <TextBlock Text="Tabs Component" FontSize="18" FontWeight="Bold" />
+            
+            <TabControl>
+                <TabItem Header="General">
+                    <StackPanel Spacing="10" Margin="0,10,0,0">
+                        <TextBlock Text="General Settings" FontWeight="SemiBold" />
+                        <TextBlock Text="This tab contains the general configuration options for the component." 
+                                   Foreground="Gray" TextWrapping="Wrap" />
+                        <CheckBox Content="Enable Notifications" IsChecked="True" />
+                        <CheckBox Content="Auto-save changes" IsChecked="False" />
+                    </StackPanel>
+                </TabItem>
+                
+                <TabItem Header="Advanced">
+                    <StackPanel Spacing="10" Margin="0,10,0,0">
+                        <TextBlock Text="Advanced Configuration" FontWeight="SemiBold" />
+                        <TextBlock Text="Warning: Changing these settings may affect system stability." 
+                                   Foreground="Orange" TextWrapping="Wrap" />
+                        <TextBox Watermark="Enter API Key..." />
+                        <NumericUpDown Value="1" Minimum="1" Maximum="10" />
+                    </StackPanel>
+                </TabItem>
+                
+                <TabItem Header="Logs">
+                    <ScrollViewer Height="100" Margin="0,10,0,0">
+                        <TextBlock Text="[10:00:01] System initialized...&#x0a;[10:00:05] Connection established...&#x0a;[10:00:12] Component Tabs rendered successfully." 
+                                   FontFamily="Courier New" FontSize="12" />
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -4,12 +4,12 @@
 set -e
 
 echo "--- Cleaning up old builds ---"
-dotnet clean
+dotnet clean rigorstarter-csharp-avalonia.csproj
 
 echo "--- Building the project ---"
-dotnet build --configuration Debug
+dotnet build rigorstarter-csharp-avalonia.csproj --configuration Debug
 
 echo "--- Launching the application ---"
-dotnet run --configuration Debug
+dotnet run --project rigorstarter-csharp-avalonia.csproj --configuration Debug
 
 echo "--- Application closed ---"

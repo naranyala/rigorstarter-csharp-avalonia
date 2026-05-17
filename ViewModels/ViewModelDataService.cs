@@ -20,6 +20,7 @@ public class ViewModelDataService
         AddComponent(searchItems, pinnedItems, inDevelopmentItems, archivesItems, "Drawer", "A sliding-up panel component", ComponentCategory.InDevelopment, "Components/Drawer.axaml", "Components/Drawer.axaml.cs");
         AddComponent(searchItems, pinnedItems, inDevelopmentItems, archivesItems, "Card", "A container for grouped information", ComponentCategory.InDevelopment, "Components/Card.axaml", "Components/Card.axaml.cs");
         AddComponent(searchItems, pinnedItems, inDevelopmentItems, archivesItems, "Button", "An interactive clickable element", ComponentCategory.InDevelopment, "Components/Button.axaml", "Components/Button.axaml.cs");
+        AddComponent(searchItems, pinnedItems, inDevelopmentItems, archivesItems, "Tabs", "A multi-view content switcher", ComponentCategory.InDevelopment, "Components/Tabs.axaml", "Components/Tabs.axaml.cs");
         AddComponent(searchItems, pinnedItems, inDevelopmentItems, archivesItems, "DataGrid", "A powerful table for data display", ComponentCategory.InDevelopment, null, null, true);
         AddComponent(searchItems, pinnedItems, inDevelopmentItems, archivesItems, "ColorPicker", "An interactive color selection tool", ComponentCategory.InDevelopment, null, null, true);
         AddComponent(searchItems, pinnedItems, inDevelopmentItems, archivesItems, "CustomChart", "Visual representation of data trends", ComponentCategory.Archives, null, null, true);
