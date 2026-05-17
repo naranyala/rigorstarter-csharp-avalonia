@@ -1,0 +1,20 @@
+# .NET Core / .NET 5+
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.useroscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# JetBrains Rider / IntelliJ
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,137 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RigorStarter.ViewModels"
+        xmlns:comp="using:RigorStarter.Components"
+        x:Class="RigorStarter.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="RigorStarter Avalonia"
+        Width="800" Height="600"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- Top Navbar -->
+        <Border Grid.Row="0" Background="#F8F9FA" BorderBrush="#DDD" BorderThickness="0,0,0,1" Padding="15">
+            <Grid ColumnDefinitions="*, Auto">
+                <TextBlock Text="RigorStarter App" 
+                           Foreground="#333" 
+                           FontSize="20" 
+                           FontWeight="Bold" 
+                           VerticalAlignment="Center"/>
+                
+                <Button Grid.Column="1" 
+                        Content="🔍 Search" 
+                        Command="{Binding ToggleSearchCommand}"
+                        Background="Transparent"
+                        Foreground="#333"
+                        BorderThickness="0"/>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <Panel Grid.Row="1">
+            <ScrollViewer>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="30" Margin="20">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Welcome to Component Dashboard" 
+                                    FontSize="24" 
+                                    FontWeight="Bold"
+                                    HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding TotalComponents, StringFormat='You have {0} component demo(s) available'}" 
+                                    FontSize="16"
+                                    HorizontalAlignment="Center" />
+                    </StackPanel>
+
+                    <Separator />
+
+                        <StackPanel Spacing="10" Width="600">
+                            <TextBlock Text="Item Detail" 
+                                        FontSize="18" 
+                                        FontWeight="Bold" 
+                                        HorizontalAlignment="Center" 
+                                        IsVisible="{Binding IsAnyItemSelected}"/>
+                            
+                            <comp:Accordion IsVisible="{Binding IsAccordionSelected}" />
+                            <comp:Drawer IsVisible="{Binding IsDrawerSelected}" />
+                            
+                            <Border IsVisible="{Binding IsUtilitySelected}" 
+                                    Background="#F0F0F0" 
+                                    CornerRadius="5" 
+                                    Padding="15" 
+                                    BorderBrush="#DDD" 
+                                    BorderThickness="1">
+                                <StackPanel Spacing="10">
+                                    <TextBlock Text="System Utility Code" FontWeight="Bold" Foreground="#555" />
+                                    <TextBlock Text="{Binding SelectedItem.Content}" 
+                                               FontFamily="Courier New" 
+                                               FontSize="13" 
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+
+                            <TextBlock Text="This component is still in development!" 
+                                       FontSize="16" 
+                                       Foreground="Gray" 
+                                       HorizontalAlignment="Center" 
+                                       IsVisible="{Binding IsMockupSelected}"
+                                       Margin="0,20,0,0"
+                                       FontStyle="Italic" />
+                        </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Search Overlay -->
+            <Grid IsVisible="{Binding IsSearchPanelOpen}">
+                <!-- Backdrop -->
+                <Border Background="#80000000" />
+                
+                <!-- Search Panel -->
+                <Border Background="White" 
+                        CornerRadius="8"
+                        Margin="50"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Stretch"
+                        MaxHeight="500"
+                        BoxShadow="0 4 10 0 #40000000">
+                    <StackPanel Spacing="10" Margin="15">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBox Text="{Binding SearchText, Mode=TwoWay}" 
+                                     Watermark="Search items..." 
+                                     VerticalAlignment="Center"/>
+                            <Button Grid.Column="1" 
+                                    Content="Close" 
+                                    Command="{Binding ToggleSearchCommand}"
+                                    Margin="10,0,0,0"/>
+                        </Grid>
+                        
+                        <Separator />
+                        
+                        <ScrollViewer MaxHeight="350">
+                            <ItemsControl ItemsSource="{Binding FilteredItems}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:SearchItemViewModel">
+                                        <Button Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).SelectItemCommand}" 
+                                                CommandParameter="{Binding}"
+                                                Background="Transparent" 
+                                                BorderThickness="0" 
+                                                HorizontalAlignment="Stretch">
+                                            <Border BorderBrush="#EEE" BorderThickness="0,0,0,1" Padding="5">
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                                                    <TextBlock Text="{Binding Description}" FontSize="12" TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </Border>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Panel>
+    </Grid>
+</Window>
