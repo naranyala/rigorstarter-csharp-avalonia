@@ -7,7 +7,7 @@ public enum ComponentCategory
 {
     Pinned,
     InDevelopment,
-    Archives
+    Archives,
 }
 
 public partial class SearchItemViewModel : ObservableObject

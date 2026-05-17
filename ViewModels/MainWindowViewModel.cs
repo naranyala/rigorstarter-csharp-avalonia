@@ -43,8 +43,14 @@ public partial class MainWindowViewModel : ObservableObject
     public MainWindowViewModel()
     {
         var dataService = new ViewModelDataService();
-        dataService.InitializeComponents(SearchItems, PinnedItems, InDevelopmentItems, ArchivesItems, AccordionItems);
-        
+        dataService.InitializeComponents(
+            SearchItems,
+            PinnedItems,
+            InDevelopmentItems,
+            ArchivesItems,
+            AccordionItems
+        );
+
         FilteredItems = new ObservableCollection<SearchItemViewModel>(SearchItems);
     }
 
@@ -101,9 +107,12 @@ public partial class MainWindowViewModel : ObservableObject
         else
         {
             var lowerValue = value.ToLower();
-            var filtered = SearchItems.Where(x => 
-                x.Name.ToLower().Contains(lowerValue) || 
-                x.Description.ToLower().Contains(lowerValue)).ToList();
+            var filtered = SearchItems
+                .Where(x =>
+                    x.Name.ToLower().Contains(lowerValue)
+                    || x.Description.ToLower().Contains(lowerValue)
+                )
+                .ToList();
             FilteredItems = new ObservableCollection<SearchItemViewModel>(filtered);
         }
     }

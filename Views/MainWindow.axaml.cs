@@ -1,5 +1,5 @@
-using Avalonia.Controls;
 using System.ComponentModel;
+using Avalonia.Controls;
 using RigorStarter.ViewModels;
 
 namespace RigorStarter.Views;
@@ -9,7 +9,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        
+
         // Subscribe to DataContext changes to handle focus
         this.DataContextChanged += (s, e) =>
         {
@@ -22,7 +22,7 @@ public partial class MainWindow : Window
                         if (vm.IsSearchPanelOpen)
                         {
                             // Use Dispatcher to ensure the element is rendered before focusing
-                            Avalonia.Threading.Dispatcher.UIThread.Post(() => 
+                            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
                             {
                                 SearchTextBox?.Focus();
                             });

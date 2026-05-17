@@ -1,47 +1,45 @@
-# RigorStarter C# Avalonia
+# RigorStarter Avalonia
 
-A sample application built with Avalonia UI and C#, demonstrating a clean implementation of the MVVM pattern.
+RigorStarter is a professional component showcase and system utility dashboard built with C# and the Avalonia UI framework. It demonstrates a modular architecture for building reusable UI components and integrating system-level diagnostics.
 
 ## Features
 
-- **Custom Accordion Component**: A reusable UI component that displays collapsible sections.
-- **Dynamic Filtering**: A search functionality that filters accordion items in real-time based on header or content.
-- **MVVM Architecture**: Built using the `CommunityToolkit.Mvvm` library for observable properties and relay commands.
-- **Cross-Platform**: Developed with Avalonia UI for compatibility across multiple operating systems.
+- Component Dashboard: A searchable registry of UI components with live previews.
+- System Utilities: Integrated tools for monitoring CPU, Memory, Disk, and Network status.
+- MVVM Architecture: Strict separation of concerns using the CommunityToolkit.Mvvm.
+- Rigorous Testing: Comprehensive xUnit test suite covering utilities and business logic.
 
-## Tech Stack
+## Project Structure
 
-- **Language**: C#
-- **Framework**: .NET 10.0
-- **UI Framework**: Avalonia UI (v11.0.10)
-- **MVVM Toolkit**: CommunityToolkit.Mvvm (v8.2.2)
+- /Components: Reusable UI controls.
+- /ViewModels: Application state and business logic.
+- /Views: Avalonia XAML views.
+- /Utilities: OS-level diagnostic tools.
+- /docs: Technical documentation.
+- /tests: Test suite.
 
 ## Getting Started
 
 ### Prerequisites
+- .NET 10.0 SDK
+- Avalonia UI environment
 
-Ensure you have the following installed:
-- [.NET 10.0 SDK](https://dotnet.microsoft.com/download)
-
-### Running the Application
-
-The project includes a convenience script to handle cleaning, building, and launching the app.
+### Installation and Execution
+To build and launch the application, run the provided shell script:
 
 ```bash
-chmod +x run.sh
-./run.sh
+bash run.sh
 ```
 
-Alternatively, you can use the dotnet CLI:
+### Running Tests
+To execute the test suite and verify system stability:
 
 ```bash
-dotnet build
-dotnet run
+dotnet test tests/RigorStarter.Tests/RigorStarter.Tests.csproj
 ```
 
-## Project Structure
-
-- `Components/`: Custom Avalonia controls (e.g., `Accordion`).
-- `ViewModels/`: Application logic and state management.
-- `Views/`: XAML files defining the user interface.
-- `App.axaml`: Global application styling and configuration.
+## Documentation
+Detailed technical guides are available in the /docs directory:
+- Architecture: docs/architecture.md
+- Component Guide: docs/components.md
+- Testing Guide: docs/testing.md

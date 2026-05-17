@@ -1,7 +1,7 @@
 using System;
-using System.Net.NetworkInformation;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 
 namespace RigorStarter.Utilities;
 
@@ -13,7 +13,7 @@ public static class NetworkUtility
         {
             var interfaces = NetworkInterface.GetAllNetworkInterfaces();
             var summary = new List<string>();
-            
+
             foreach (var ni in interfaces)
             {
                 if (ni.OperationalStatus == OperationalStatus.Up)
@@ -26,11 +26,12 @@ public static class NetworkUtility
                     summary.Add($"  Sent Bytes: {stats.BytesSent}");
                 }
             }
-            
-            string result = summary.Count > 0 
-                ? string.Join("\n", summary) 
-                : "No active network interfaces found.";
-                
+
+            string result =
+                summary.Count > 0
+                    ? string.Join("\n", summary)
+                    : "No active network interfaces found.";
+
             return new UtilityResult(true, result);
         }
         catch (Exception ex)
