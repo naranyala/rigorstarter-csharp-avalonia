@@ -1,0 +1,8 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="RigorStarter.Components.Button">
+    <StackPanel Spacing="10">
+        <TextBlock Text="Button Component" FontSize="18" FontWeight="Bold" />
+        <Button Content="Click Me" HorizontalAlignment="Center" />
+    </StackPanel>
+</UserControl>

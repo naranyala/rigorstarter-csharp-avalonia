@@ -3,6 +3,13 @@ using RigorStarter.Utilities;
 
 namespace RigorStarter.ViewModels;
 
+public enum ComponentCategory
+{
+    Pinned,
+    InDevelopment,
+    Archives
+}
+
 public partial class SearchItemViewModel : ObservableObject
 {
     [ObservableProperty]
@@ -25,6 +32,14 @@ public partial class SearchItemViewModel : ObservableObject
 
     [ObservableProperty]
     private UtilityResult? _executionResult;
+
+    [ObservableProperty]
+    private ComponentCategory _category = ComponentCategory.InDevelopment;
+
+    [ObservableProperty]
+    private int _linesOfCode;
+
+    public Action<SearchItemViewModel>? ExecuteAction { get; set; }
 
     public string ResultText => ExecutionResult?.Message ?? string.Empty;
     public bool ResultIsSuccess => ExecutionResult?.IsSuccess ?? true;

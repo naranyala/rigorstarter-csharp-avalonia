@@ -1,0 +1,10 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="RigorStarter.Components.Card">
+    <Border Background="White" CornerRadius="8" Padding="15" BorderBrush="#DDD" BorderThickness="1">
+        <StackPanel Spacing="10">
+            <TextBlock Text="Card Component" FontSize="18" FontWeight="Bold" />
+            <TextBlock Text="This is a mockup of a card component." Foreground="Gray" />
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -40,6 +40,7 @@
         <Panel Grid.Row="1">
             <ScrollViewer>
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="30" Margin="20">
+                    <!-- Dashboard View -->
                     <StackPanel Spacing="10" IsVisible="{Binding !IsAnyItemSelected}">
                         <TextBlock Text="Welcome to Component Dashboard" 
                                    FontSize="24" 
@@ -47,54 +48,109 @@
                                    HorizontalAlignment="Center" />
                         <TextBlock Text="{Binding TotalItems, StringFormat='You have {0} items available'}" 
                                    FontSize="16"
-                                   HorizontalAlignment="Center" />
+                                   HorizontalAlignment="Center" 
+                                   Margin="0,0,0,20"/>
+
+                        <TextBlock Text="Pinned" FontSize="18" FontWeight="SemiBold" Foreground="#2196F3"/>
+                        <ItemsControl ItemsSource="{Binding PinnedItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:SearchItemViewModel">
+                                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,2">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Medium" />
+                                        <TextBlock Text="|" Foreground="LightGray" />
+                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="Gray" FontSize="12" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Separator Margin="0,10" />
+
+                        <TextBlock Text="In Development" FontSize="18" FontWeight="SemiBold" Foreground="#FF9800"/>
+                        <ItemsControl ItemsSource="{Binding InDevelopmentItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:SearchItemViewModel">
+                                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,2">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Medium" />
+                                        <TextBlock Text="|" Foreground="LightGray" />
+                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="Gray" FontSize="12" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Separator Margin="0,10" />
+
+                        <TextBlock Text="Archives" FontSize="18" FontWeight="SemiBold" Foreground="#757575"/>
+                        <ItemsControl ItemsSource="{Binding ArchivesItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:SearchItemViewModel">
+                                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,2">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Medium" />
+                                        <TextBlock Text="|" Foreground="LightGray" />
+                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="Gray" FontSize="12" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
-                    
-                        <StackPanel Spacing="10" Width="600">
-                            <comp:Accordion IsVisible="{Binding IsAccordionSelected}" />
-                            <comp:Drawer IsVisible="{Binding IsDrawerSelected}" />
-                            
-                            <Border IsVisible="{Binding IsUtilitySelected}" 
-                                    Background="White" 
-                                    CornerRadius="5" 
-                                    Padding="15" 
-                                    BorderBrush="#DDD" 
-                                    BorderThickness="1">
-                                <StackPanel Spacing="15">
-                                    <StackPanel Spacing="5">
-                                        <TextBlock Text="Source Code" FontWeight="Bold" Foreground="#555" />
-                                        <Border Background="#F8F9FA" CornerRadius="4" Padding="10" BorderBrush="#EEE" BorderThickness="1">
-                                            <TextBlock Text="{Binding SelectedItem.SourceCode}" 
-                                                       FontFamily="Courier New" 
-                                                       FontSize="12" 
-                                                       TextWrapping="Wrap" 
-                                                       Foreground="#333" />
-                                        </Border>
-                                    </StackPanel>
-                                    
-                                    <StackPanel Spacing="5">
-                                        <TextBlock Text="Execution Result" FontWeight="Bold" Foreground="#555" />
-                                        <Border Background="{Binding SelectedItem.ResultIsSuccess, Converter={StaticResource SuccessToColorConverter}}" 
-                                                BorderBrush="{Binding SelectedItem.ResultIsSuccess, Converter={StaticResource SuccessToBorderConverter}}"
-                                                CornerRadius="4" Padding="10" BorderThickness="1">
-                                            <TextBlock Text="{Binding SelectedItem.ResultText}" 
-                                                       FontFamily="Courier New" 
-                                                       FontSize="12" 
-                                                       TextWrapping="Wrap" 
-                                                       Foreground="{Binding SelectedItem.ResultIsSuccess, Converter={StaticResource SuccessToTextConverter}}" />
-                                        </Border>
-                                    </StackPanel>
+
+                    <!-- Item Detail View -->
+                    <StackPanel Spacing="10" Width="600" IsVisible="{Binding IsAnyItemSelected}">
+                        <comp:Accordion IsVisible="{Binding IsAccordionSelected}" />
+                        <comp:Drawer IsVisible="{Binding IsDrawerSelected}" />
+                        <comp:Card IsVisible="{Binding IsCardSelected}" />
+                        <comp:Button IsVisible="{Binding IsButtonSelected}" />
+                        
+                        <Border IsVisible="{Binding IsUtilitySelected}" 
+                                Background="White" 
+                                CornerRadius="5" 
+                                Padding="15" 
+                                BorderBrush="#DDD" 
+                                BorderThickness="1">
+                            <StackPanel Spacing="15">
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="Source Code" FontWeight="Bold" Foreground="#555" />
+                                    <Border Background="#F8F9FA" CornerRadius="4" Padding="10" BorderBrush="#EEE" BorderThickness="1">
+                                        <TextBlock Text="{Binding SelectedItem.SourceCode}" 
+                                                   FontFamily="Courier New" 
+                                                   FontSize="12" 
+                                                   TextWrapping="Wrap" 
+                                                   Foreground="#333" />
+                                    </Border>
                                 </StackPanel>
-                            </Border>
-                            
-                            <TextBlock Text="This component is still in development!" 
-                                       FontSize="16" 
-                                       Foreground="Gray" 
-                                       HorizontalAlignment="Center" 
-                                       IsVisible="{Binding IsMockupSelected}"
-                                       Margin="0,20,0,0"
-                                       FontStyle="Italic" />
-                        </StackPanel>
+                                
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="Execution Result" FontWeight="Bold" Foreground="#555" />
+                                    <Border CornerRadius="4" Padding="10" BorderThickness="1">
+                                        <Border.Styles>
+                                            <Style Selector="Border">
+                                                <Setter Property="Background" Value="#F0FDF4"/>
+                                                <Setter Property="BorderBrush" Value="#BBF7D0"/>
+                                            </Style>
+                                            <Style Selector="Border[IsVisible=False]">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                            </Style>
+                                        </Border.Styles>
+                                        <TextBlock Text="{Binding SelectedItem.ResultText}" 
+                                                   FontFamily="Courier New" 
+                                                   FontSize="12" 
+                                                   TextWrapping="Wrap" 
+                                                   Foreground="#166534" />
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="This component is still in development!" 
+                                   FontSize="16" 
+                                   Foreground="Gray" 
+                                   HorizontalAlignment="Center" 
+                                   IsVisible="{Binding IsMockupSelected}"
+                                   Margin="0,20,0,0"
+                                   FontStyle="Italic" />
+                    </StackPanel>
                 </StackPanel>
             </ScrollViewer>
 
@@ -112,15 +168,15 @@
                         MaxHeight="500"
                         BoxShadow="0 4 10 0 #40000000">
                     <StackPanel Spacing="10" Margin="15">
-                                <Grid ColumnDefinitions="*, Auto">
-                                    <TextBox Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay}" 
-                                             Watermark="Search items..." 
-                                             VerticalAlignment="Center"/>
-                                    <Button Grid.Column="1" 
-                                            Content="Close" 
-                                            Command="{Binding ToggleSearchCommand}"
-                                            Margin="10,0,0,0"/>
-                                </Grid>
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBox Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay}" 
+                                     Watermark="Search items..." 
+                                     VerticalAlignment="Center"/>
+                            <Button Grid.Column="1" 
+                                    Content="Close" 
+                                    Command="{Binding ToggleSearchCommand}"
+                                    Margin="10,0,0,0"/>
+                        </Grid>
                         
                         <Separator />
                         
