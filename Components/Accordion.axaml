@@ -4,15 +4,17 @@
                x:Class="RigorStarter.Components.Accordion"
                x:DataType="vm:MainWindowViewModel">
     
-    <ItemsControl ItemsSource="{Binding AccordionItems}">
+    <ItemsControl ItemsSource="{Binding AccordionItems}" 
+                  HorizontalAlignment="Stretch">
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="vm:AccordionItemViewModel">
                 <Expander Header="{Binding Header}" 
-                          IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
-                          Margin="0,0,0,5">
+                           IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                           Margin="0,0,0,10"
+                           HorizontalAlignment="Stretch">
                     <TextBlock Text="{Binding Content}" 
-                               TextWrapping="Wrap" 
-                               Margin="10,5" />
+                                TextWrapping="Wrap" 
+                                Margin="10,5" />
                 </Expander>
             </DataTemplate>
         </ItemsControl.ItemTemplate>

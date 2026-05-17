@@ -79,6 +79,17 @@ public partial class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(IsAnyItemSelected));
     }
 
+    [RelayCommand]
+    private void GoToDashboard()
+    {
+        SelectedItem = null;
+        OnPropertyChanged(nameof(IsAccordionSelected));
+        OnPropertyChanged(nameof(IsDrawerSelected));
+        OnPropertyChanged(nameof(IsUtilitySelected));
+        OnPropertyChanged(nameof(IsMockupSelected));
+        OnPropertyChanged(nameof(IsAnyItemSelected));
+    }
+
     partial void OnSearchTextChanged(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -92,44 +103,6 @@ public partial class MainWindowViewModel : ObservableObject
                 x.Name.ToLower().Contains(lowerValue) || 
                 x.Description.ToLower().Contains(lowerValue)).ToList();
             FilteredItems = new ObservableCollection<SearchItemViewModel>(filtered);
-        }
-    }
-}
-
-    [RelayCommand]
-    private void ToggleSearch()
-    {
-        IsSearchPanelOpen = !IsSearchPanelOpen;
-        if (!IsSearchPanelOpen)
-        {
-            SearchText = string.Empty;
-        }
-    }
-
-    [RelayCommand]
-    private void SelectComponent(ComponentDemoViewModel component)
-    {
-        SelectedComponent = component;
-        IsSearchPanelOpen = false;
-        OnPropertyChanged(nameof(IsAccordionSelected));
-        OnPropertyChanged(nameof(IsDrawerSelected));
-        OnPropertyChanged(nameof(IsMockupSelected));
-        OnPropertyChanged(nameof(IsAnyComponentSelected));
-    }
-
-    partial void OnSearchTextChanged(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            FilteredComponents = new ObservableCollection<ComponentDemoViewModel>(ComponentDemos);
-        }
-        else
-        {
-            var lowerValue = value.ToLower();
-            var filtered = ComponentDemos.Where(x => 
-                x.Name.ToLower().Contains(lowerValue) || 
-                x.Description.ToLower().Contains(lowerValue)).ToList();
-            FilteredComponents = new ObservableCollection<ComponentDemoViewModel>(filtered);
         }
     }
 }
