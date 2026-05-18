@@ -7,7 +7,25 @@ namespace RigorStarter.Tests;
 
 public class ViewModelTests
 {
-    private MainWindowViewModel CreateVM() => ServiceProvider.GetService<MainWindowViewModel>();
+    private MainWindowViewModel CreateVM() =>
+        new MainWindowViewModel(
+            ServiceProvider.GetService<Core.Interfaces.IDataService>(),
+            ServiceProvider.GetService<Core.Interfaces.IThemeService>(),
+            ServiceProvider.GetService<Core.Interfaces.ITrayService>(),
+            ServiceProvider.GetService<Core.Interfaces.IDialogService>(),
+            ServiceProvider.GetService<Core.Interfaces.INotificationService>()
+        );
+
+    [Fact]
+    public void InitialState_ShouldBeCorrect()
+    {
+        var vm = CreateVM();
+        Assert.False(vm.IsSearchPanelOpen);
+        Assert.NotNull(vm.SearchItems);
+        Assert.NotEmpty(vm.SearchItems);
+        Assert.Null(vm.SelectedItem);
+        Assert.False(vm.IsAnyItemSelected);
+    }
 
     [Theory]
     [InlineData("accordion")]
@@ -43,6 +61,33 @@ public class ViewModelTests
     }
 
     [Fact]
+    public void Search_WithCaseInsensitiveQuery_ShouldMatch()
+    {
+        var vm = CreateVM();
+        vm.SearchText = "ACCORDION";
+        Assert.NotEmpty(vm.FilteredItems);
+        Assert.Contains(vm.FilteredItems, i => i.Name == "Accordion");
+    }
+
+    [Fact]
+    public void Search_WithPartialName_ShouldMatch()
+    {
+        var vm = CreateVM();
+        vm.SearchText = "Accord";
+        Assert.NotEmpty(vm.FilteredItems);
+        Assert.Contains(vm.FilteredItems, i => i.Name == "Accordion");
+    }
+
+    [Fact]
+    public void Search_WithPartialDescription_ShouldMatch()
+    {
+        var vm = CreateVM();
+        vm.SearchText = "collapsible";
+        Assert.NotEmpty(vm.FilteredItems);
+        Assert.Contains(vm.FilteredItems, i => i.Name == "Accordion");
+    }
+
+    [Fact]
     public void Selection_ShouldUpdateCorrectStateProperties()
     {
         // Arrange
@@ -72,10 +117,38 @@ public class ViewModelTests
 
         vm.SelectItemCommand.Execute(item);
 
-        var property = typeof(MainWindowViewModel).GetProperty(propertyName);
-        var value = (bool)property.GetValue(vm);
-
+        var prop = typeof(MainWindowViewModel).GetProperty(propertyName);
+        Assert.NotNull(prop);
+        var value = (bool)prop.GetValue(vm)!;
         Assert.True(value);
+    }
+
+    [Fact]
+    public void SelectingUtility_ShouldExecuteAction()
+    {
+        var vm = CreateVM();
+        var networkUtil = vm.SearchItems.First(i => i.Name == "Network Utility");
+
+        Assert.Null(networkUtil.ExecutionResult);
+
+        vm.SelectItemCommand.Execute(networkUtil);
+
+        // After selection, the utility action should have been executed
+        Assert.NotNull(networkUtil.ExecutionResult);
+        Assert.True(networkUtil.ExecutionResult.IsSuccess);
+    }
+
+    [Fact]
+    public void SelectingUtility_ShouldCloseSearchPanel()
+    {
+        var vm = CreateVM();
+        vm.ToggleSearchCommand.Execute(null);
+        Assert.True(vm.IsSearchPanelOpen);
+
+        var networkUtil = vm.SearchItems.First(i => i.Name == "Network Utility");
+        vm.SelectItemCommand.Execute(networkUtil);
+
+        Assert.False(vm.IsSearchPanelOpen);
     }
 
     [Fact]
@@ -115,5 +188,75 @@ public class ViewModelTests
 
         // Assert back to initial
         Assert.Equal(initialTheme, vm.IsDarkTheme);
+    }
+
+    [Fact]
+    public void ToggleSearch_ShouldTogglePanelOpenState()
+    {
+        var vm = CreateVM();
+        Assert.False(vm.IsSearchPanelOpen);
+
+        vm.ToggleSearchCommand.Execute(null);
+        Assert.True(vm.IsSearchPanelOpen);
+
+        vm.ToggleSearchCommand.Execute(null);
+        Assert.False(vm.IsSearchPanelOpen);
+    }
+
+    [Fact]
+    public void ToggleSearch_Closing_ShouldClearSearchText()
+    {
+        var vm = CreateVM();
+        vm.ToggleSearchCommand.Execute(null);
+        vm.SearchText = "test query";
+        Assert.Equal("test query", vm.SearchText);
+
+        vm.ToggleSearchCommand.Execute(null);
+        Assert.Empty(vm.SearchText);
+    }
+
+    [Fact]
+    public void ExitCommand_ShouldNotThrow()
+    {
+        var vm = CreateVM();
+        // ExitCommand accesses Application.Current which is null in tests
+        // The null-conditional operator should prevent any crash
+        var exception = Record.Exception(() => vm.ExitCommand.Execute(null));
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void UtilityResultText_ShouldReflectExecution()
+    {
+        var vm = CreateVM();
+        var util = vm.SearchItems.First(i => i.IsUtility);
+        Assert.Equal(string.Empty, util.ResultText);
+        Assert.True(util.ResultIsSuccess);
+
+        vm.SelectItemCommand.Execute(util);
+        Assert.NotEqual(string.Empty, util.ResultText);
+    }
+
+    [Fact]
+    public void TotalItems_ShouldMatchSearchItemsCount()
+    {
+        var vm = CreateVM();
+        Assert.Equal(vm.SearchItems.Count, vm.TotalItems);
+    }
+
+    [Fact]
+    public void PinnedItems_ShouldBePopulated()
+    {
+        var vm = CreateVM();
+        Assert.NotEmpty(vm.PinnedItems);
+        Assert.Contains(vm.PinnedItems, i => i.Name == "Accordion");
+    }
+
+    [Fact]
+    public void InDevelopmentItems_ShouldBePopulated()
+    {
+        var vm = CreateVM();
+        Assert.NotEmpty(vm.InDevelopmentItems);
+        Assert.Contains(vm.InDevelopmentItems, i => i.Name == "Drawer");
     }
 }

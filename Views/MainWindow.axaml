@@ -12,9 +12,19 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto, *">
+    <Grid RowDefinitions="Auto, Auto, *">
+        <!-- Menu Bar -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
+            </MenuItem>
+            <MenuItem Header="_Edit" />
+            <MenuItem Header="_View" />
+            <MenuItem Header="_Help" />
+        </Menu>
+
         <!-- Top Navbar -->
-        <Border Grid.Row="0" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="15">
+        <Border Grid.Row="1" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="15">
             <Grid ColumnDefinitions="*, Auto">
                 <Button Command="{Binding GoToDashboardCommand}" 
                         Background="Transparent" 
@@ -44,7 +54,7 @@
         </Border>
 
         <!-- Main Content Area -->
-        <Panel Grid.Row="1">
+        <Panel Grid.Row="2">
             <ScrollViewer>
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="30" Margin="20">
                     <!-- Dashboard View -->

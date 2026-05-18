@@ -17,8 +17,8 @@ internal static class NativeMethods
     [DllImport(LibC, SetLastError = true)]
     public static extern int gethostname(StringBuilder name, uint len);
 
-    [DllImport(LibC, SetLastError = true)]
-    public static extern int uname(out Utsname buf);
+    [DllImport(LibC, EntryPoint = "uname", SetLastError = true)]
+    public static extern int uname(IntPtr buf);
 
     [DllImport(LibC, SetLastError = true)]
     public static extern int getloadavg(double[] loadavg, int nelements);

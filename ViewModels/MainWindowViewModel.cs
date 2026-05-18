@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
-using Avalonia.Styling;
+using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RigorStarter.Core.Interfaces;
@@ -14,6 +14,9 @@ public partial class MainWindowViewModel : ObservableObject
 {
     private readonly IDataService _dataService;
     private readonly IThemeService _themeService;
+    private readonly ITrayService _trayService;
+    private readonly IDialogService _dialogService;
+    private readonly INotificationService _notificationService;
 
     [ObservableProperty]
     private bool _isSearchPanelOpen;
@@ -51,10 +54,19 @@ public partial class MainWindowViewModel : ObservableObject
     public ObservableCollection<SearchItemViewModel> InDevelopmentItems { get; } = new();
     public ObservableCollection<SearchItemViewModel> ArchivesItems { get; } = new();
 
-    public MainWindowViewModel(IDataService dataService, IThemeService themeService)
+    public MainWindowViewModel(
+        IDataService dataService,
+        IThemeService themeService,
+        ITrayService trayService,
+        IDialogService dialogService,
+        INotificationService notificationService
+    )
     {
         _dataService = dataService;
         _themeService = themeService;
+        _trayService = trayService;
+        _dialogService = dialogService;
+        _notificationService = notificationService;
         _dataService.InitializeComponents(
             SearchItems,
             PinnedItems,
@@ -64,6 +76,9 @@ public partial class MainWindowViewModel : ObservableObject
         );
 
         FilteredItems = new ObservableCollection<SearchItemViewModel>(SearchItems);
+
+        // Initialize the native tray
+        _trayService.Initialize("system-run", "RigorStarter Dashboard");
     }
 
     [RelayCommand]
@@ -104,6 +119,18 @@ public partial class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(IsUtilitySelected));
         OnPropertyChanged(nameof(IsMockupSelected));
         OnPropertyChanged(nameof(IsAnyItemSelected));
+    }
+
+    [RelayCommand]
+    private void Exit()
+    {
+        if (
+            Application.Current?.ApplicationLifetime
+            is IClassicDesktopStyleApplicationLifetime desktop
+        )
+        {
+            desktop.Shutdown();
+        }
     }
 
     [RelayCommand]

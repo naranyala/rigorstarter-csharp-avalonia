@@ -27,12 +27,21 @@ public unsafe struct SysInfo
 /// <summary>
 /// C-compatible struct for utsname (from <sys/utsname.h>)
 /// </summary>
-[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-public unsafe struct Utsname
+[StructLayout(LayoutKind.Sequential)]
+public struct Utsname
 {
-    public fixed byte sysname[65];
-    public fixed byte nodename[65];
-    public fixed byte release[65];
-    public fixed byte version[65];
-    public fixed byte machine[65];
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 65)]
+    public byte[] sysname;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 65)]
+    public byte[] nodename;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 65)]
+    public byte[] release;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 65)]
+    public byte[] version;
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 65)]
+    public byte[] machine;
 }

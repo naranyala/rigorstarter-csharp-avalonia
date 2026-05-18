@@ -42,15 +42,24 @@ public static class LinuxNativeBridge
     {
         try
         {
-            int result = NativeMethods.uname(out Utsname buf);
-            if (result != 0)
-                return (false, string.Empty);
-
-            unsafe
+            int size = Marshal.SizeOf<Utsname>();
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            try
             {
-                // buf.release is a fixed byte buffer. We can access it directly as a pointer.
-                byte* pRelease = buf.release;
-                return (true, Marshal.PtrToStringAnsi((IntPtr)pRelease) ?? string.Empty);
+                int result = NativeMethods.uname(ptr);
+                if (result != 0)
+                    return (false, string.Empty);
+
+                Utsname buf = Marshal.PtrToStructure<Utsname>(ptr);
+                string release =
+                    buf.release != null
+                        ? System.Text.Encoding.ASCII.GetString(buf.release).TrimEnd('\0')
+                        : string.Empty;
+                return (true, release);
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(ptr);
             }
         }
         catch (Exception ex)

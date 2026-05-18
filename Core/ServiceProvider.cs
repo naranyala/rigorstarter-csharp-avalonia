@@ -17,14 +17,26 @@ public static class ServiceProvider
         var dataService = new DataService(systemService);
         var themeService = new ThemeService();
         var memoryService = new NativeMemoryService();
+        var trayService = new TrayService();
+        var dialogService = new DialogService();
+        var notificationService = new NotificationService();
 
         _services[typeof(ISystemService)] = systemService;
         _services[typeof(IDataService)] = dataService;
         _services[typeof(IThemeService)] = themeService;
         _services[typeof(INativeMemoryService)] = memoryService;
+        _services[typeof(ITrayService)] = trayService;
+        _services[typeof(IDialogService)] = dialogService;
+        _services[typeof(INotificationService)] = notificationService;
 
         // Register ViewModels
-        _services[typeof(MainWindowViewModel)] = new MainWindowViewModel(dataService, themeService);
+        _services[typeof(MainWindowViewModel)] = new MainWindowViewModel(
+            dataService,
+            themeService,
+            trayService,
+            dialogService,
+            notificationService
+        );
     }
 
     public static T GetService<T>()
