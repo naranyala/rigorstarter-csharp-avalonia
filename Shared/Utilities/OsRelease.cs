@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace RigorStarter.Utilities;
+namespace RigorStarter.Shared.Utilities;
 
 public record DistroInfo(string Name, string Version, string Id, string PrettyName);
 

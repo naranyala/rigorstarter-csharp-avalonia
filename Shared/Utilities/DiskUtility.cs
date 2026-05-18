@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using RigorStarter.Shared.Models;
 
-namespace RigorStarter.Utilities;
+namespace RigorStarter.Shared.Utilities;
 
 public static class DiskUtility
 {

@@ -1,4 +1,4 @@
-namespace RigorStarter.Utilities;
+namespace RigorStarter.Shared.Utilities;
 
 public enum BadgeStatus
 {

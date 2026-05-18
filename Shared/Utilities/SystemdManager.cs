@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace RigorStarter.Utilities;
+namespace RigorStarter.Shared.Utilities;
 
 public static class SystemdManager
 {

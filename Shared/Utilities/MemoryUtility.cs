@@ -1,7 +1,8 @@
 using System;
-using RigorStarter.Utilities;
+using RigorStarter.Shared.Models;
+using RigorStarter.Shared.Utilities;
 
-namespace RigorStarter.Utilities;
+namespace RigorStarter.Shared.Utilities;
 
 public static class MemoryUtility
 {

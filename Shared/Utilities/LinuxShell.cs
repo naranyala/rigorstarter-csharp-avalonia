@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RigorStarter.Utilities;
+namespace RigorStarter.Shared.Utilities;
 
 public record ShellResult(int ExitCode, string StandardOutput, string StandardError);
 

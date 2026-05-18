@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace RigorStarter.Utilities;
+namespace RigorStarter.Shared.Utilities;
 
 public static class XdgPaths
 {

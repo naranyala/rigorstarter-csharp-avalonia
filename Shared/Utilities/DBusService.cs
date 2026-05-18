@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Tmds.DBus;
 
-namespace RigorStarter.Utilities;
+namespace RigorStarter.Shared.Utilities;
 
 public static class DBusService
 {

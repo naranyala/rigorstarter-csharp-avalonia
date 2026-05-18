@@ -1,13 +1,22 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using RigorStarter.Utilities;
+using RigorStarter.Core.Interfaces;
+using RigorStarter.Shared.Models;
+using RigorStarter.Shared.Utilities;
 using RigorStarter.ViewModels;
 
-namespace RigorStarter.ViewModels;
+namespace RigorStarter.Core.Services;
 
-public class ViewModelDataService
+public class DataService : IDataService
 {
+    private readonly ISystemService _systemService;
+
+    public DataService(ISystemService systemService)
+    {
+        _systemService = systemService;
+    }
+
     public void InitializeComponents(
         ObservableCollection<SearchItemViewModel> searchItems,
         ObservableCollection<SearchItemViewModel> pinnedItems,
@@ -143,108 +152,42 @@ public class ViewModelDataService
             true
         );
 
-        // Utilities
-        searchItems.Add(
-            new SearchItemViewModel
-            {
-                Name = "Network Utility",
-                Description = "System network information utility",
-                IsUtility = true,
-                SourceCode =
-                    "public static string GetNetworkSummary()\n{\n    // Implementation in Utilities/NetworkUtility.cs\n}",
-                ExecuteAction = (item) => item.ExecutionResult = NetworkUtility.GetNetworkSummary(),
-            }
+        // Utilities - Now using the injected ISystemService instead of static calls
+        AddUtility(
+            searchItems,
+            "Network Utility",
+            "System network information utility",
+            () => _systemService.GetNetworkSummary()
         );
-        searchItems.Add(
-            new SearchItemViewModel
-            {
-                Name = "Disk Utility",
-                Description = "Storage and drive space summary",
-                IsUtility = true,
-                SourceCode =
-                    "public static string GetDiskSummary()\n{\n    // Implementation in Utilities/DiskUtility.cs\n}",
-                ExecuteAction = (item) => item.ExecutionResult = DiskUtility.GetDiskSummary(),
-            }
+        AddUtility(
+            searchItems,
+            "Disk Utility",
+            "Storage and drive space summary",
+            () => _systemService.GetDiskSummary()
         );
-        searchItems.Add(
-            new SearchItemViewModel
-            {
-                Name = "System Info Utility",
-                Description = "OS and hardware specifications",
-                IsUtility = true,
-                SourceCode =
-                    "public static string GetSystemSummary()\n{\n    // Implementation in Utilities/SystemInfoUtility.cs\n}",
-                ExecuteAction = (item) =>
-                    item.ExecutionResult = SystemInfoUtility.GetSystemSummary(),
-            }
+        AddUtility(
+            searchItems,
+            "System Info Utility",
+            "OS and hardware specifications",
+            () => _systemService.GetSystemSummary()
         );
-        searchItems.Add(
-            new SearchItemViewModel
-            {
-                Name = "Process Utility",
-                Description = "Top memory-consuming processes",
-                IsUtility = true,
-                SourceCode =
-                    "public static string GetTopProcesses()\n{\n    // Implementation in Utilities/ProcessUtility.cs\n}",
-                ExecuteAction = (item) => item.ExecutionResult = ProcessUtility.GetTopProcesses(),
-            }
+        AddUtility(
+            searchItems,
+            "Process Utility",
+            "Top memory-consuming processes",
+            () => _systemService.GetTopProcesses()
         );
-        searchItems.Add(
-            new SearchItemViewModel
-            {
-                Name = "Memory Utility",
-                Description = "RAM and memory usage summary",
-                IsUtility = true,
-                SourceCode =
-                    "public static UtilityResult GetMemorySummary()\n{\n    // Implementation in Utilities/MemoryUtility.cs\n}",
-                ExecuteAction = (item) => item.ExecutionResult = MemoryUtility.GetMemorySummary(),
-            }
+        AddUtility(
+            searchItems,
+            "Memory Utility",
+            "RAM and memory usage summary",
+            () => _systemService.GetMemorySummary()
         );
-        searchItems.Add(
-            new SearchItemViewModel
-            {
-                Name = "CPU Utility",
-                Description = "Processor utilization and info",
-                IsUtility = true,
-                SourceCode =
-                    "public static UtilityResult GetCpuSummary()\n{\n    // Implementation in Utilities/CpuUtility.cs\n}",
-                ExecuteAction = (item) => item.ExecutionResult = CpuUtility.GetCpuSummary(),
-            }
-        );
-
-        searchItems.Add(
-            new SearchItemViewModel
-            {
-                Name = "Disk Utility",
-                Description = "Storage and drive space summary",
-                IsUtility = true,
-                SourceCode =
-                    "public static string GetDiskSummary()\n{\n    // Implementation in Utilities/DiskUtility.cs\n}",
-                ExecuteAction = (item) => item.ExecutionResult = DiskUtility.GetDiskSummary(),
-            }
-        );
-        searchItems.Add(
-            new SearchItemViewModel
-            {
-                Name = "System Info Utility",
-                Description = "OS and hardware specifications",
-                IsUtility = true,
-                SourceCode =
-                    "public static string GetSystemSummary()\n{\n    // Implementation in Utilities/SystemInfoUtility.cs\n}",
-                ExecuteAction = (item) =>
-                    item.ExecutionResult = SystemInfoUtility.GetSystemSummary(),
-            }
-        );
-        searchItems.Add(
-            new SearchItemViewModel
-            {
-                Name = "Process Utility",
-                Description = "Top memory-consuming processes",
-                IsUtility = true,
-                SourceCode =
-                    "public static string GetTopProcesses()\n{\n    // Implementation in Utilities/ProcessUtility.cs\n}",
-                ExecuteAction = (item) => item.ExecutionResult = ProcessUtility.GetTopProcesses(),
-            }
+        AddUtility(
+            searchItems,
+            "CPU Utility",
+            "Processor utilization and info",
+            () => _systemService.GetCpuSummary()
         );
 
         // Accordion Items
@@ -269,6 +212,26 @@ public class ViewModelDataService
             {
                 Header = "Section 3",
                 Content = "Finally, section 3 provides additional context and details.",
+            }
+        );
+    }
+
+    private void AddUtility(
+        ObservableCollection<SearchItemViewModel> searchItems,
+        string name,
+        string description,
+        Func<string> action
+    )
+    {
+        searchItems.Add(
+            new SearchItemViewModel
+            {
+                Name = name,
+                Description = description,
+                IsUtility = true,
+                SourceCode =
+                    $"public static string Get{name.Replace(" ", "")}()\n{{\n    // Implementation in Services/SystemService.cs\n}}",
+                ExecuteAction = (item) => item.ExecutionResult = new UtilityResult(true, action()),
             }
         );
     }
@@ -303,7 +266,6 @@ public class ViewModelDataService
         };
 
         searchItems.Add(item);
-
         switch (category)
         {
             case ComponentCategory.Pinned:
@@ -323,9 +285,7 @@ public class ViewModelDataService
         try
         {
             if (File.Exists(filePath))
-            {
                 return File.ReadAllLines(filePath).Length;
-            }
         }
         catch { }
         return 0;

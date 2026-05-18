@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using RigorStarter.Utilities;
+using RigorStarter.Shared.Utilities;
 
 namespace RigorStarter.Converters;
 

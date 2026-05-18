@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using RigorStarter.Utilities;
+using RigorStarter.Shared.Utilities;
 using Xunit;
 
 namespace RigorStarter.Tests;

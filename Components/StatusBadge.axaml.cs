@@ -1,6 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
-using RigorStarter.Utilities;
+using RigorStarter.Shared.Utilities;
 
 namespace RigorStarter.Components;
 

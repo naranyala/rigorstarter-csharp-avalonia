@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using RigorStarter.Utilities;
+using RigorStarter.Shared.Models;
+using RigorStarter.Shared.Utilities;
 
 namespace RigorStarter.ViewModels;
 

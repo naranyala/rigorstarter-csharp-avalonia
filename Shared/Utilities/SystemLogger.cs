@@ -1,7 +1,7 @@
 using Serilog;
 using Serilog.Core;
 
-namespace RigorStarter.Utilities;
+namespace RigorStarter.Shared.Utilities;
 
 public static class SystemLogger
 {

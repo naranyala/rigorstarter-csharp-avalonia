@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace RigorStarter.Utilities;
+namespace RigorStarter.Shared.Utilities;
 
 /// <summary>
 /// The SystemHub acts as the primary entry point for the Linux system library,

@@ -5,12 +5,15 @@ using Avalonia;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using RigorStarter.Utilities;
+using RigorStarter.Core.Interfaces;
+using RigorStarter.Shared.Utilities;
 
 namespace RigorStarter.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
+    private readonly IDataService _dataService;
+
     [ObservableProperty]
     private bool _isSearchPanelOpen;
 
@@ -47,10 +50,10 @@ public partial class MainWindowViewModel : ObservableObject
     public ObservableCollection<SearchItemViewModel> InDevelopmentItems { get; } = new();
     public ObservableCollection<SearchItemViewModel> ArchivesItems { get; } = new();
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(IDataService dataService)
     {
-        var dataService = new ViewModelDataService();
-        dataService.InitializeComponents(
+        _dataService = dataService;
+        _dataService.InitializeComponents(
             SearchItems,
             PinnedItems,
             InDevelopmentItems,

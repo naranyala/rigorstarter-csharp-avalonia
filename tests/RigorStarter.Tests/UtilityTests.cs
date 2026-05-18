@@ -1,5 +1,6 @@
 using System;
-using RigorStarter.Utilities;
+using RigorStarter.Shared.Models;
+using RigorStarter.Shared.Utilities;
 using Xunit;
 
 namespace RigorStarter.Tests;
