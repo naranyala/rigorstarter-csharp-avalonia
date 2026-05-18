@@ -1,0 +1,68 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RigorStarter.ViewModels"
+             xmlns:models="using:RigorStarter.Shared.Models"
+             x:Class="RigorStarter.Components.TodoListJson"
+             x:DataType="vm:MainWindowViewModel">
+    <Border x:Name="ContentRoot"
+            x:DataType="vm:TodoListJsonViewModel"
+            x:CompileBindings="False"
+            Background="{DynamicResource SurfaceBackground}"
+            CornerRadius="8"
+            Padding="20"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1"
+            Width="500">
+        <StackPanel Spacing="15">
+            <TextBlock Text="JSON Todo List"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource PrimaryText}" />
+            <TextBlock Text="{Binding RemainingCount, StringFormat={}{0} items remaining}"
+                       FontSize="13"
+                       Foreground="{DynamicResource SecondaryText}" />
+
+            <Grid ColumnDefinitions="*, Auto">
+                <TextBox Text="{Binding NewItemTitle, Mode=TwoWay}"
+                         Watermark="What needs to be done?"
+                         VerticalAlignment="Center" />
+                <Button Grid.Column="1"
+                        Content="Add"
+                        Command="{Binding AddItemCommand}"
+                        VerticalAlignment="Center" />
+            </Grid>
+
+            <ScrollViewer MaxHeight="300">
+                <ItemsControl ItemsSource="{Binding Items}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:TodoItem">
+                            <Border BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="0,6">
+                                <Grid ColumnDefinitions="Auto, *, Auto">
+                                    <CheckBox IsChecked="{Binding IsCompleted}"
+                                              Command="{Binding $parent[Border].DataContext.ToggleItemCommand}"
+                                              CommandParameter="{Binding}"
+                                              VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Title}"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource PrimaryText}" />
+                                    <Button Grid.Column="2"
+                                            Content="✕"
+                                            Command="{Binding $parent[Border].DataContext.DeleteItemCommand}"
+                                            CommandParameter="{Binding}"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Foreground="#E53935"
+                                            FontSize="14"
+                                            VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+    </Border>
+</UserControl>

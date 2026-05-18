@@ -151,6 +151,39 @@ public class DataService : IDataService
             null,
             true
         );
+        AddComponent(
+            searchItems,
+            pinnedItems,
+            inDevelopmentItems,
+            archivesItems,
+            "TodoList",
+            "A SQLite-backed todo list demo",
+            ComponentCategory.Pinned,
+            "Components/TodoList.axaml",
+            "Components/TodoList.axaml.cs"
+        );
+        AddComponent(
+            searchItems,
+            pinnedItems,
+            inDevelopmentItems,
+            archivesItems,
+            "TodoListJson",
+            "A JSON-backed todo list demo",
+            ComponentCategory.Pinned,
+            "Components/TodoListJson.axaml",
+            "Components/TodoListJson.axaml.cs"
+        );
+        AddComponent(
+            searchItems,
+            pinnedItems,
+            inDevelopmentItems,
+            archivesItems,
+            "TreeViewDemo",
+            "A collapsible tree view demo with nested nodes",
+            ComponentCategory.Pinned,
+            "Components/TreeViewDemo.axaml",
+            "Components/TreeViewDemo.axaml.cs"
+        );
 
         // Utilities - Now using the injected ISystemService instead of static calls
         AddUtility(

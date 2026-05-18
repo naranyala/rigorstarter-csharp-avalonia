@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RigorStarter.ViewModels"
+             xmlns:models="using:RigorStarter.Shared.Models"
+             x:Class="RigorStarter.Components.TreeViewDemo"
+             x:DataType="vm:MainWindowViewModel">
+    <Border x:Name="ContentRoot"
+            x:DataType="vm:TreeViewDemoViewModel"
+            Background="{DynamicResource SurfaceBackground}"
+            CornerRadius="8"
+            Padding="20"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1"
+            Width="500">
+        <StackPanel Spacing="15">
+            <TextBlock Text="Collapsible TreeView"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource PrimaryText}" />
+            <TextBlock Text="All nodes expanded by default — click to toggle"
+                       FontSize="13"
+                       Foreground="{DynamicResource SecondaryText}" />
+
+            <ScrollViewer MaxHeight="350">
+                <TreeView ItemsSource="{Binding Items}"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          x:CompileBindings="False">
+                    <TreeView.Styles>
+                        <Style Selector="TreeViewItem">
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+                        </Style>
+                    </TreeView.Styles>
+                    <TreeView.ItemTemplate>
+                        <TreeDataTemplate ItemsSource="{Binding Children}"
+                                          x:DataType="models:TreeNodeItem">
+                            <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,3">
+                                <TextBlock Text="{Binding Name}"
+                                           Foreground="{DynamicResource PrimaryText}" />
+                            </StackPanel>
+                        </TreeDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </ScrollViewer>
+        </StackPanel>
+    </Border>
+</UserControl>
+

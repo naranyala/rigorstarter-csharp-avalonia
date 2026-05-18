@@ -20,6 +20,8 @@ public static class ServiceProvider
         var trayService = new TrayService();
         var dialogService = new DialogService();
         var notificationService = new NotificationService();
+        var todoService = new TodoService();
+        var todoServiceJson = new TodoServiceJson();
 
         _services[typeof(ISystemService)] = systemService;
         _services[typeof(IDataService)] = dataService;
@@ -28,8 +30,13 @@ public static class ServiceProvider
         _services[typeof(ITrayService)] = trayService;
         _services[typeof(IDialogService)] = dialogService;
         _services[typeof(INotificationService)] = notificationService;
+        _services[typeof(ITodoService)] = todoService;
 
         // Register ViewModels
+        _services[typeof(TodoListViewModel)] = new TodoListViewModel(todoService);
+        _services[typeof(TodoListJsonViewModel)] = new TodoListJsonViewModel(todoServiceJson);
+        _services[typeof(TreeViewDemoViewModel)] = new TreeViewDemoViewModel();
+
         _services[typeof(MainWindowViewModel)] = new MainWindowViewModel(
             dataService,
             themeService,

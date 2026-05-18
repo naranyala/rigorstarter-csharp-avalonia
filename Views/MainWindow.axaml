@@ -1,12 +1,13 @@
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:RigorStarter.ViewModels"
-        xmlns:comp="using:RigorStarter.Components"
-        x:Class="RigorStarter.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Title="RigorStarter Avalonia"
-        Width="800" Height="600"
-        WindowStartupLocation="CenterScreen">
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:vm="using:RigorStarter.ViewModels"
+         xmlns:comp="using:RigorStarter.Components"
+         x:Class="RigorStarter.Views.MainWindow"
+         x:DataType="vm:MainWindowViewModel"
+         x:Name="RootWindow"
+         Title="RigorStarter Avalonia"
+         Width="800" Height="600"
+         WindowStartupLocation="CenterScreen">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -120,6 +121,9 @@
                         <comp:Button IsVisible="{Binding IsButtonSelected}" />
                         <comp:Tabs IsVisible="{Binding IsTabsSelected}" />
                         <comp:MetricCard IsVisible="{Binding IsMetricCardSelected}" />
+                        <comp:TodoList IsVisible="{Binding IsTodoListSelected, ElementName=RootWindow, Path=DataContext.IsTodoListSelected}" x:CompileBindings="False" />
+                        <comp:TodoListJson IsVisible="{Binding IsTodoListJsonSelected, ElementName=RootWindow, Path=DataContext.IsTodoListJsonSelected}" x:CompileBindings="False" />
+                        <comp:TreeViewDemo IsVisible="{Binding IsTreeViewDemoSelected, ElementName=RootWindow, Path=DataContext.IsTreeViewDemoSelected}" x:CompileBindings="False" />
                         
                         <Border IsVisible="{Binding IsUtilitySelected}" 
                                 Background="{DynamicResource SurfaceBackground}" 
@@ -132,10 +136,10 @@
                                     <TextBlock Text="Source Code" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}" />
                                     <Border Background="{DynamicResource AppBackground}" CornerRadius="4" Padding="10" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
                                         <TextBlock Text="{Binding SelectedItem.SourceCode}" 
-                                                   FontFamily="Courier New" 
-                                                   FontSize="12" 
-                                                   TextWrapping="Wrap" 
-                                                   Foreground="{DynamicResource PrimaryText}" />
+                                                    FontFamily="Courier New" 
+                                                    FontSize="12" 
+                                                    TextWrapping="Wrap" 
+                                                    Foreground="{DynamicResource PrimaryText}" />
                                     </Border>
                                 </StackPanel>
                                 
@@ -153,10 +157,10 @@
                                             </Style>
                                         </Border.Styles>
                                         <TextBlock Text="{Binding SelectedItem.ResultText}" 
-                                                   FontFamily="Courier New" 
-                                                   FontSize="12" 
-                                                   TextWrapping="Wrap" 
-                                                   Foreground="{DynamicResource SuccessText}" />
+                                                    FontFamily="Courier New" 
+                                                    FontSize="12" 
+                                                    TextWrapping="Wrap" 
+                                                    Foreground="{DynamicResource SuccessText}" />
                                     </Border>
                                 </StackPanel>
                             </StackPanel>
@@ -173,55 +177,22 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <!-- Search Overlay -->
-            <Grid IsVisible="{Binding IsSearchPanelOpen}">
-                <!-- Backdrop -->
-                <Border Background="#80000000" />
-                
-                <!-- Search Panel -->
-                <Border Background="{DynamicResource SurfaceBackground}" 
-                        CornerRadius="8"
-                        Margin="50"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Stretch"
-                        MaxHeight="500"
-                        BoxShadow="0 4 10 0 #40000000">
-                    <StackPanel Spacing="10" Margin="15">
-                        <Grid ColumnDefinitions="*, Auto">
-                            <TextBox Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay}" 
-                                     Watermark="Search items..." 
-                                     VerticalAlignment="Center"/>
-                            <Button Grid.Column="1" 
-                                    Content="Close" 
-                                    Command="{Binding ToggleSearchCommand}"
-                                    Margin="10,0,0,0"/>
-                        </Grid>
-                        
-                        <Separator />
-                        
-                        <ScrollViewer MaxHeight="350">
-                            <ItemsControl ItemsSource="{Binding FilteredItems}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate x:DataType="vm:SearchItemViewModel">
-                                        <Button Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).SelectItemCommand}" 
-                                                CommandParameter="{Binding}"
-                                                Background="Transparent" 
-                                                BorderThickness="0" 
-                                                HorizontalAlignment="Stretch">
-                                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="5">
-                                                <StackPanel>
-                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                                                    <TextBlock Text="{Binding Description}" FontSize="12" TextWrapping="Wrap" />
-                                                </StackPanel>
-                                            </Border>
-                                        </Button>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
-                    </StackPanel>
-                </Border>
-            </Grid>
+            <Border IsVisible="{Binding IsSearchPanelOpen}" 
+                    Background="#CC000000" 
+                    ZIndex="100">
+                <StackPanel Margin="20" Spacing="10" VerticalAlignment="Top">
+                    <TextBox x:Name="SearchTextBox" 
+                             Text="{Binding SearchText, Mode=TwoWay}" 
+                             Watermark="Search..." 
+                             HorizontalAlignment="Stretch"/>
+                    <Button Content="Close" 
+                            Command="{Binding ToggleSearchCommand}" 
+                            HorizontalAlignment="Right"/>
+                </StackPanel>
+            </Border>
         </Panel>
     </Grid>
 </Window>
+
+
+

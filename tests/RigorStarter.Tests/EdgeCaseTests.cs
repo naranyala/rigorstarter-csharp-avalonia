@@ -132,14 +132,17 @@ public class EdgeCaseTests
         Directory.CreateDirectory(tmpDir);
         try
         {
-            var method = typeof(DataService).GetMethod("CountLines",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!;
+            var method = typeof(DataService).GetMethod(
+                "CountLines",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
+            )!;
             var result = method.Invoke(service, new object[] { tmpDir });
             Assert.Equal(0, (int)result!);
         }
         finally
         {
-            if (Directory.Exists(tmpDir)) Directory.Delete(tmpDir);
+            if (Directory.Exists(tmpDir))
+                Directory.Delete(tmpDir);
         }
     }
 
@@ -147,11 +150,12 @@ public class EdgeCaseTests
     public void DataService_CountLines_WithSpecialFilePath_ShouldNotThrow()
     {
         var service = new DataService(new SystemService());
-        var method = typeof(DataService).GetMethod("CountLines",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!;
+        var method = typeof(DataService).GetMethod(
+            "CountLines",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
+        )!;
 
-        var ex = Record.Exception(() =>
-            method.Invoke(service, new object[] { "/dev/null" }));
+        var ex = Record.Exception(() => method.Invoke(service, new object[] { "/dev/null" }));
         Assert.Null(ex);
     }
 
@@ -159,8 +163,10 @@ public class EdgeCaseTests
     public void DataService_CountLines_WithVeryLongPath_ShouldReturnZero()
     {
         var service = new DataService(new SystemService());
-        var method = typeof(DataService).GetMethod("CountLines",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!;
+        var method = typeof(DataService).GetMethod(
+            "CountLines",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
+        )!;
         var longPath = new string('x', 500) + ".txt";
         var result = method.Invoke(service, new object[] { longPath });
         Assert.Equal(0, (int)result!);
@@ -298,9 +304,9 @@ public class EdgeCaseTests
         // The process is killed, resulting in a timeout-related error
         var combined = result.StandardError + result.StandardOutput;
         Assert.True(
-            combined.Contains("timeout", StringComparison.OrdinalIgnoreCase) ||
-            combined.Contains("killed", StringComparison.OrdinalIgnoreCase) ||
-            combined.Contains("exit", StringComparison.OrdinalIgnoreCase),
+            combined.Contains("timeout", StringComparison.OrdinalIgnoreCase)
+                || combined.Contains("killed", StringComparison.OrdinalIgnoreCase)
+                || combined.Contains("exit", StringComparison.OrdinalIgnoreCase),
             $"Expected error message about timeout/kill, got: stderr='{result.StandardError}' stdout='{result.StandardOutput}'"
         );
     }
@@ -415,7 +421,8 @@ public class EdgeCaseTests
         var fileName = "config.yaml";
         // Ensure directory does NOT exist
         var dir = XdgPaths.GetConfigDir(appName);
-        if (Directory.Exists(dir)) Directory.Delete(dir, true);
+        if (Directory.Exists(dir))
+            Directory.Delete(dir, true);
 
         try
         {
@@ -510,8 +517,7 @@ public class EdgeCaseTests
     public async Task NotificationService_DefaultPriority_ShouldBeNormal()
     {
         var service = new NotificationService();
-        var ex = await Record.ExceptionAsync(
-            () => service.SendNotificationAsync("t", "m"));
+        var ex = await Record.ExceptionAsync(() => service.SendNotificationAsync("t", "m"));
         Assert.Null(ex);
     }
 
@@ -524,7 +530,8 @@ public class EdgeCaseTests
         var result = await NativeNotificationBridge.SendNotificationAsync(
             "test'; echo pwned; '",
             "msg$(id)",
-            "normal");
+            "normal"
+        );
         // Should return false (notify-send will fail with these args) or true gracefully
         Assert.NotNull(result);
     }
@@ -535,9 +542,7 @@ public class EdgeCaseTests
     public async Task NativeDialogBridge_SpecialChars_ShouldNotExecuteInjection()
     {
         // Test with special characters that could break out of zenity arguments
-        var path = await NativeDialogBridge.OpenFileAsync(
-            "test\"; echo pwned; \"",
-            "*.*");
+        var path = await NativeDialogBridge.OpenFileAsync("test\"; echo pwned; \"", "*.*");
         // Should not execute the injected command, return null or a path
         Assert.Null(path);
     }
@@ -668,7 +673,7 @@ public class EdgeCaseTests
             Title = "Memory",
             Status = BadgeStatus.Warning,
             Value = "80%",
-            Trend = "↑ 5%"
+            Trend = "↑ 5%",
         };
         Assert.Equal("Memory", vm.Title);
         Assert.Equal(BadgeStatus.Warning, vm.Status);
@@ -691,7 +696,8 @@ public class EdgeCaseTests
     public async Task LinuxNotifier_WithSpecialChars_ShouldNotThrow()
     {
         var ex = await Record.ExceptionAsync(() =>
-            LinuxNotifier.SendNotification("test'title", "msg\"with\"quotes"));
+            LinuxNotifier.SendNotification("test'title", "msg\"with\"quotes")
+        );
         // notify-send may not be available, but the utility should handle it gracefully
         Assert.Null(ex);
     }
@@ -730,7 +736,8 @@ public class EdgeCaseTests
             "invalid.destination",
             "/invalid/path",
             "invalid.interface",
-            "invalid_prop");
+            "invalid_prop"
+        );
         Assert.NotNull(result);
         Assert.Contains("Error", result);
     }
@@ -759,9 +766,15 @@ public class EdgeCaseTests
         }
         finally
         {
-            var dirs = new[] { XdgPaths.GetConfigDir(appName), XdgPaths.GetDataDir(appName), XdgPaths.GetCacheDir(appName) };
+            var dirs = new[]
+            {
+                XdgPaths.GetConfigDir(appName),
+                XdgPaths.GetDataDir(appName),
+                XdgPaths.GetCacheDir(appName),
+            };
             foreach (var d in dirs)
-                if (Directory.Exists(d)) Directory.Delete(d, true);
+                if (Directory.Exists(d))
+                    Directory.Delete(d, true);
         }
     }
 
@@ -771,30 +784,36 @@ public class EdgeCaseTests
     [InlineData(NotificationPriority.Low)]
     [InlineData(NotificationPriority.Normal)]
     [InlineData(NotificationPriority.Critical)]
-    public async Task NotificationService_AllPriorities_ShouldComplete(NotificationPriority priority)
+    public async Task NotificationService_AllPriorities_ShouldComplete(
+        NotificationPriority priority
+    )
     {
         var service = new NotificationService();
-        var ex = await Record.ExceptionAsync(
-            () => service.SendNotificationAsync("t", "m", priority));
+        var ex = await Record.ExceptionAsync(() =>
+            service.SendNotificationAsync("t", "m", priority)
+        );
         Assert.Null(ex);
     }
 
     // ========== Helpers ==========
 
-    private static MainWindowViewModel CreateVM() => new(
-        ServiceProvider.GetService<IDataService>(),
-        ServiceProvider.GetService<IThemeService>(),
-        ServiceProvider.GetService<ITrayService>(),
-        ServiceProvider.GetService<IDialogService>(),
-        ServiceProvider.GetService<INotificationService>()
-    );
+    private static MainWindowViewModel CreateVM() =>
+        new(
+            ServiceProvider.GetService<IDataService>(),
+            ServiceProvider.GetService<IThemeService>(),
+            ServiceProvider.GetService<ITrayService>(),
+            ServiceProvider.GetService<IDialogService>(),
+            ServiceProvider.GetService<INotificationService>()
+        );
 
     private static void CleanupConfig(string appName, string fileName)
     {
         var dir = XdgPaths.GetConfigDir(appName);
         var path = Path.Combine(dir, fileName);
-        if (File.Exists(path)) File.Delete(path);
-        if (Directory.Exists(dir)) Directory.Delete(dir, true);
+        if (File.Exists(path))
+            File.Delete(path);
+        if (Directory.Exists(dir))
+            Directory.Delete(dir, true);
     }
 
     private class TestEdgeConfig
