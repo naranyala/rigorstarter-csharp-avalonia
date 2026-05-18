@@ -1,29 +1,28 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
+using RigorStarter.Core.Interfaces;
 
 namespace RigorStarter.Components;
 
-public partial class Drawer : UserControl
+public partial class Drawer : UserControl, IComponentModule
 {
+    public new string Name => "Drawer";
+    public string Description => "A sliding-up panel component";
+    public ComponentCategory Category => ComponentCategory.InDevelopment;
+    public Type ViewType => typeof(Drawer);
+    public bool IsMockup => false;
+
     public Drawer()
     {
         InitializeComponent();
     }
 
-    private void InitializeComponent()
+    private void ToggleBtn_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        AvaloniaXamlLoader.Load(this);
-    }
-
-    private void ToggleBtn_Click(object sender, RoutedEventArgs e)
-    {
-        var panel = this.FindControl<Border>("DrawerPanel");
-        if (panel != null)
+        if (DrawerPanel != null)
         {
-            panel.IsVisible = !panel.IsVisible;
+            DrawerPanel.IsVisible = !DrawerPanel.IsVisible;
         }
     }
 }

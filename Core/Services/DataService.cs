@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using RigorStarter.Core;
 using RigorStarter.Core.Interfaces;
 using RigorStarter.Shared.Models;
 using RigorStarter.Shared.Utilities;
@@ -11,10 +12,12 @@ namespace RigorStarter.Core.Services;
 public class DataService : IDataService
 {
     private readonly ISystemService _systemService;
+    private readonly ComponentRegistry _componentRegistry;
 
-    public DataService(ISystemService systemService)
+    public DataService(ISystemService systemService, ComponentRegistry componentRegistry)
     {
         _systemService = systemService;
+        _componentRegistry = componentRegistry;
     }
 
     public void InitializeComponents(
@@ -25,189 +28,59 @@ public class DataService : IDataService
         ObservableCollection<AccordionItemViewModel> accordionItems
     )
     {
-        // Components
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "Accordion",
-            "A collapsible section component",
-            ComponentCategory.Pinned,
-            "Components/Accordion.axaml",
-            "Components/Accordion.axaml.cs"
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "Drawer",
-            "A sliding-up panel component",
-            ComponentCategory.InDevelopment,
-            "Components/Drawer.axaml",
-            "Components/Drawer.axaml.cs"
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "Card",
-            "A container for grouped information",
-            ComponentCategory.InDevelopment,
-            "Components/Card.axaml",
-            "Components/Card.axaml.cs"
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "Button",
-            "An interactive clickable element",
-            ComponentCategory.InDevelopment,
-            "Components/Button.axaml",
-            "Components/Button.axaml.cs"
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "Tabs",
-            "A multi-view content switcher",
-            ComponentCategory.InDevelopment,
-            "Components/Tabs.axaml",
-            "Components/Tabs.axaml.cs"
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "StatusBadge",
-            "A small indicator for status states",
-            ComponentCategory.InDevelopment,
-            "Components/StatusBadge.axaml",
-            "Components/StatusBadge.axaml.cs"
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "MetricCard",
-            "A card displaying key performance indicators",
-            ComponentCategory.InDevelopment,
-            "Components/MetricCard.axaml",
-            "Components/MetricCard.axaml.cs"
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "DataGrid",
-            "A powerful table for data display",
-            ComponentCategory.InDevelopment,
-            null,
-            null,
-            true
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "ColorPicker",
-            "An interactive color selection tool",
-            ComponentCategory.InDevelopment,
-            null,
-            null,
-            true
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "CustomChart",
-            "Visual representation of data trends",
-            ComponentCategory.Archives,
-            null,
-            null,
-            true
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "ToastNotification",
-            "Non-intrusive feedback messages",
-            ComponentCategory.Archives,
-            null,
-            null,
-            true
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "TodoList",
-            "A SQLite-backed todo list demo",
-            ComponentCategory.Pinned,
-            "Components/TodoList.axaml",
-            "Components/TodoList.axaml.cs"
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "TodoListJson",
-            "A JSON-backed todo list demo",
-            ComponentCategory.Pinned,
-            "Components/TodoListJson.axaml",
-            "Components/TodoListJson.axaml.cs"
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "TreeViewDemo",
-            "A collapsible tree view demo with nested nodes",
-            ComponentCategory.Pinned,
-            "Components/TreeViewDemo.axaml",
-            "Components/TreeViewDemo.axaml.cs"
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "Table Data",
-            "A sortable data table demo",
-            ComponentCategory.InDevelopment,
-            "Components/TableData.axaml",
-            "Components/TableData.axaml.cs"
-        );
-        AddComponent(
-            searchItems,
-            pinnedItems,
-            inDevelopmentItems,
-            archivesItems,
-            "Markdown Demo",
-            "A markdown editor and viewer",
-            ComponentCategory.InDevelopment,
-            "Components/MarkdownDemo.axaml",
-            "Components/MarkdownDemo.axaml.cs"
-        );
+        // 1. Auto-Discover and Add Components from Registry
+        foreach (var module in _componentRegistry.Modules)
+        {
+            Type vmType = module.Name switch
+            {
+                "Accordion" => typeof(AccordionViewModel),
+                "Drawer" => typeof(DrawerViewModel),
+                "Card" => typeof(CardViewModel),
+                "Button" => typeof(ButtonViewModel),
+                "Tabs" => typeof(TabsViewModel),
+                "StatusBadge" => typeof(StatusBadgeViewModel),
+                "MetricCard" => typeof(MetricCardViewModel),
+                "TodoList" => typeof(TodoListViewModel),
+                "TodoListJson" => typeof(TodoListJsonViewModel),
+                "TreeViewDemo" => typeof(TreeViewDemoViewModel),
+                "Table Data" => typeof(TableDataViewModel),
+                "Markdown Demo" => typeof(MarkdownDemoViewModel),
+                _ => typeof(SearchItemViewModel),
+            };
 
-        // Utilities - Now using the injected ISystemService instead of static calls
+            SearchItemViewModel item;
+            try
+            {
+                item = (SearchItemViewModel)ServiceProvider.GetService(vmType);
+            }
+            catch
+            {
+                item = (SearchItemViewModel)Activator.CreateInstance(vmType)!;
+            }
+
+            item.Name = module.Name;
+            item.Description = module.Description;
+            item.Category = module.Category;
+            item.IsMockup = module.IsMockup;
+            item.IsComponent = true;
+            item.ViewName = module.Name.Replace(" ", "");
+
+            searchItems.Add(item);
+            switch (module.Category)
+            {
+                case ComponentCategory.Pinned:
+                    pinnedItems.Add(item);
+                    break;
+                case ComponentCategory.InDevelopment:
+                    inDevelopmentItems.Add(item);
+                    break;
+                case ComponentCategory.Archives:
+                    archivesItems.Add(item);
+                    break;
+            }
+        }
+
+        // 2. Add Utilities
         AddUtility(
             searchItems,
             "Network Utility",
@@ -245,29 +118,20 @@ public class DataService : IDataService
             () => _systemService.GetCpuSummary()
         );
 
-        // Accordion Items
+        // 3. Static Accordion Items
         accordionItems.Add(
             new AccordionItemViewModel
             {
                 Header = "Section 1",
-                Content =
-                    "This is the content for section 1. It can be any text or even other controls!",
+                Content = "Content 1",
                 IsExpanded = true,
             }
         );
         accordionItems.Add(
-            new AccordionItemViewModel
-            {
-                Header = "Section 2",
-                Content = "Here is some more detailed information in section 2.",
-            }
+            new AccordionItemViewModel { Header = "Section 2", Content = "Content 2" }
         );
         accordionItems.Add(
-            new AccordionItemViewModel
-            {
-                Header = "Section 3",
-                Content = "Finally, section 3 provides additional context and details.",
-            }
+            new AccordionItemViewModel { Header = "Section 3", Content = "Content 3" }
         );
     }
 
@@ -279,70 +143,16 @@ public class DataService : IDataService
     )
     {
         searchItems.Add(
-            new SearchItemViewModel
+            new UtilityViewModel
             {
                 Name = name,
                 Description = description,
                 IsUtility = true,
                 SourceCode =
                     $"public static string Get{name.Replace(" ", "")}()\n{{\n    // Implementation in Services/SystemService.cs\n}}",
+                ViewName = "Utility",
                 ExecuteAction = (item) => item.ExecutionResult = new UtilityResult(true, action()),
             }
         );
-    }
-
-    private void AddComponent(
-        ObservableCollection<SearchItemViewModel> searchItems,
-        ObservableCollection<SearchItemViewModel> pinnedItems,
-        ObservableCollection<SearchItemViewModel> inDevelopmentItems,
-        ObservableCollection<SearchItemViewModel> archivesItems,
-        string name,
-        string description,
-        ComponentCategory category,
-        string? file1 = null,
-        string? file2 = null,
-        bool isMockup = false
-    )
-    {
-        int lines = 0;
-        if (file1 != null)
-            lines += CountLines(file1);
-        if (file2 != null)
-            lines += CountLines(file2);
-
-        var item = new SearchItemViewModel
-        {
-            Name = name,
-            Description = description,
-            IsComponent = true,
-            IsMockup = isMockup,
-            Category = category,
-            LinesOfCode = lines,
-        };
-
-        searchItems.Add(item);
-        switch (category)
-        {
-            case ComponentCategory.Pinned:
-                pinnedItems.Add(item);
-                break;
-            case ComponentCategory.InDevelopment:
-                inDevelopmentItems.Add(item);
-                break;
-            case ComponentCategory.Archives:
-                archivesItems.Add(item);
-                break;
-        }
-    }
-
-    private int CountLines(string filePath)
-    {
-        try
-        {
-            if (File.Exists(filePath))
-                return File.ReadAllLines(filePath).Length;
-        }
-        catch { }
-        return 0;
     }
 }

@@ -33,20 +33,13 @@ public partial class MainWindowViewModel : ObservableObject
     private ObservableCollection<SearchItemViewModel> _filteredItems = new();
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(
+        nameof(IsUtilitySelected),
+        nameof(IsMockupSelected),
+        nameof(IsAnyItemSelected)
+    )]
     private SearchItemViewModel? _selectedItem;
 
-    public bool IsAccordionSelected => SelectedItem?.Name == "Accordion";
-    public bool IsDrawerSelected => SelectedItem?.Name == "Drawer";
-    public bool IsCardSelected => SelectedItem?.Name == "Card";
-    public bool IsButtonSelected => SelectedItem?.Name == "Button";
-    public bool IsTabsSelected => SelectedItem?.Name == "Tabs";
-    public bool IsStatusBadgeSelected => SelectedItem?.Name == "StatusBadge";
-    public bool IsMetricCardSelected => SelectedItem?.Name == "MetricCard";
-    public bool IsTodoListSelected => SelectedItem?.Name == "TodoList";
-    public bool IsTodoListJsonSelected => SelectedItem?.Name == "TodoListJson";
-    public bool IsTreeViewDemoSelected => SelectedItem?.Name == "TreeViewDemo";
-    public bool IsTableDataSelected => SelectedItem?.Name == "Table Data";
-    public bool IsMarkdownDemoSelected => SelectedItem?.Name == "Markdown Demo";
     public bool IsUtilitySelected => SelectedItem?.IsUtility ?? false;
     public bool IsMockupSelected => SelectedItem?.IsMockup ?? false;
     public bool IsAnyItemSelected => SelectedItem != null;
@@ -114,42 +107,12 @@ public partial class MainWindowViewModel : ObservableObject
 
         SelectedItem = item;
         IsSearchPanelOpen = false;
-        OnPropertyChanged(nameof(IsAccordionSelected));
-        OnPropertyChanged(nameof(IsDrawerSelected));
-        OnPropertyChanged(nameof(IsCardSelected));
-        OnPropertyChanged(nameof(IsButtonSelected));
-        OnPropertyChanged(nameof(IsTabsSelected));
-        OnPropertyChanged(nameof(IsStatusBadgeSelected));
-        OnPropertyChanged(nameof(IsMetricCardSelected));
-        OnPropertyChanged(nameof(IsTodoListSelected));
-        OnPropertyChanged(nameof(IsTodoListJsonSelected));
-        OnPropertyChanged(nameof(IsTreeViewDemoSelected));
-        OnPropertyChanged(nameof(IsTableDataSelected));
-        OnPropertyChanged(nameof(IsMarkdownDemoSelected));
-        OnPropertyChanged(nameof(IsUtilitySelected));
-        OnPropertyChanged(nameof(IsMockupSelected));
-        OnPropertyChanged(nameof(IsAnyItemSelected));
     }
 
     [RelayCommand]
     private void GoToDashboard()
     {
         SelectedItem = null;
-        OnPropertyChanged(nameof(IsAccordionSelected));
-        OnPropertyChanged(nameof(IsDrawerSelected));
-        OnPropertyChanged(nameof(IsCardSelected));
-        OnPropertyChanged(nameof(IsButtonSelected));
-        OnPropertyChanged(nameof(IsTabsSelected));
-        OnPropertyChanged(nameof(IsStatusBadgeSelected));
-        OnPropertyChanged(nameof(IsMetricCardSelected));
-        OnPropertyChanged(nameof(IsTodoListSelected));
-        OnPropertyChanged(nameof(IsTodoListJsonSelected));
-        OnPropertyChanged(nameof(IsTreeViewDemoSelected));
-        OnPropertyChanged(nameof(IsTableDataSelected));
-        OnPropertyChanged(nameof(IsMarkdownDemoSelected));
-        OnPropertyChanged(nameof(IsUtilitySelected));
-        OnPropertyChanged(nameof(IsMockupSelected));
-        OnPropertyChanged(nameof(IsAnyItemSelected));
     }
 
     [RelayCommand]

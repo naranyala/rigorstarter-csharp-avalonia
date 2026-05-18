@@ -14,7 +14,11 @@ public static class ServiceProvider
     {
         // Register Services (Singletons)
         var systemService = new SystemService();
-        var dataService = new DataService(systemService);
+
+        var componentRegistry = new ComponentRegistry();
+        componentRegistry.DiscoverModules();
+
+        var dataService = new DataService(systemService, componentRegistry);
         var themeService = new ThemeService();
         var memoryService = new NativeMemoryService();
         var trayService = new TrayService();
@@ -24,6 +28,7 @@ public static class ServiceProvider
         var todoServiceJson = new TodoServiceJson();
 
         _services[typeof(ISystemService)] = systemService;
+        _services[typeof(ComponentRegistry)] = componentRegistry;
         _services[typeof(IDataService)] = dataService;
         _services[typeof(IThemeService)] = themeService;
         _services[typeof(INativeMemoryService)] = memoryService;
@@ -50,10 +55,15 @@ public static class ServiceProvider
 
     public static T GetService<T>()
     {
-        if (_services.TryGetValue(typeof(T), out var service))
+        return (T)GetService(typeof(T));
+    }
+
+    public static object GetService(Type type)
+    {
+        if (_services.TryGetValue(type, out var service))
         {
-            return (T)service;
+            return service;
         }
-        throw new Exception($"Service of type {typeof(T).Name} not registered.");
+        throw new Exception($"Service of type {type.Name} not registered.");
     }
 }

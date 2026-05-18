@@ -2,6 +2,7 @@
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:vm="using:RigorStarter.ViewModels"
          xmlns:comp="using:RigorStarter.Components"
+         xmlns:conv="using:RigorStarter.Converters"
          x:Class="RigorStarter.Views.MainWindow"
          x:DataType="vm:MainWindowViewModel"
          x:Name="RootWindow"
@@ -12,6 +13,25 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+
+    <Window.Resources>
+        <conv:StringEqualsConverter x:Key="StringEqualsConverter"/>
+    </Window.Resources>
+
+    <Window.DataTemplates>
+        <!-- This is the magic: map each ViewModel to its View -->
+        <DataTemplate DataType="vm:AccordionViewModel"><comp:Accordion /></DataTemplate>
+        <DataTemplate DataType="vm:DrawerViewModel"><comp:Drawer /></DataTemplate>
+        <DataTemplate DataType="vm:CardViewModel"><comp:Card /></DataTemplate>
+        <DataTemplate DataType="vm:ButtonViewModel"><comp:Button /></DataTemplate>
+        <DataTemplate DataType="vm:TabsViewModel"><comp:Tabs /></DataTemplate>
+        <DataTemplate DataType="vm:MetricCardViewModel"><comp:MetricCard /></DataTemplate>
+        <DataTemplate DataType="vm:TodoListViewModel"><comp:TodoList /></DataTemplate>
+        <DataTemplate DataType="vm:TodoListJsonViewModel"><comp:TodoListJson /></DataTemplate>
+        <DataTemplate DataType="vm:TreeViewDemoViewModel"><comp:TreeViewDemo /></DataTemplate>
+        <DataTemplate DataType="vm:TableDataViewModel"><comp:TableData /></DataTemplate>
+        <DataTemplate DataType="vm:MarkdownDemoViewModel"><comp:MarkdownDemo /></DataTemplate>
+    </Window.DataTemplates>
 
     <Grid RowDefinitions="Auto, Auto, *">
         <!-- Menu Bar -->
@@ -76,7 +96,6 @@
                                     <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,2">
                                         <TextBlock Text="{Binding Name}" FontWeight="Medium" />
                                         <TextBlock Text="|" Foreground="{DynamicResource SecondaryText}" />
-                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="{DynamicResource SecondaryText}" FontSize="12" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -91,7 +110,6 @@
                                     <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,2">
                                         <TextBlock Text="{Binding Name}" FontWeight="Medium" />
                                         <TextBlock Text="|" Foreground="{DynamicResource SecondaryText}" />
-                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="{DynamicResource SecondaryText}" FontSize="12" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -106,7 +124,6 @@
                                     <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,2">
                                         <TextBlock Text="{Binding Name}" FontWeight="Medium" />
                                         <TextBlock Text="|" Foreground="{DynamicResource SecondaryText}" />
-                                        <TextBlock Text="{Binding LinesOfCode, StringFormat='{}{0} lines'}" Foreground="{DynamicResource SecondaryText}" FontSize="12" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -115,20 +132,10 @@
 
                     <!-- Item Detail View -->
                     <StackPanel Spacing="10" Width="600" IsVisible="{Binding IsAnyItemSelected}">
-                        <comp:Accordion IsVisible="{Binding IsAccordionSelected}" />
-                        <comp:Drawer IsVisible="{Binding IsDrawerSelected}" />
-                        <comp:Card IsVisible="{Binding IsCardSelected}" />
-                        <comp:Button IsVisible="{Binding IsButtonSelected}" />
-                        <comp:Tabs IsVisible="{Binding IsTabsSelected}" />
-                        <comp:MetricCard IsVisible="{Binding IsMetricCardSelected}" />
-                        <comp:TodoList IsVisible="{Binding IsTodoListSelected, ElementName=RootWindow, Path=DataContext.IsTodoListSelected}" x:CompileBindings="False" />
-                        <comp:TodoListJson IsVisible="{Binding IsTodoListJsonSelected, ElementName=RootWindow, Path=DataContext.IsTodoListJsonSelected}" x:CompileBindings="False" />
-                        <comp:TreeViewDemo IsVisible="{Binding IsTreeViewDemoSelected, ElementName=RootWindow, Path=DataContext.IsTreeViewDemoSelected}" x:CompileBindings="False" />
-                        <comp:TableData IsVisible="{Binding IsTableDataSelected, ElementName=RootWindow, Path=DataContext.IsTableDataSelected}" x:CompileBindings="False" />
-                        <comp:MarkdownDemo IsVisible="{Binding IsMarkdownDemoSelected, ElementName=RootWindow, Path=DataContext.IsMarkdownDemoSelected}" x:CompileBindings="False" />
+                        <!-- The Magic: Single line instead of 12+ components -->
+                        <ContentControl Content="{Binding SelectedItem}" />
                         
                         <Border IsVisible="{Binding IsUtilitySelected}" 
-
                                 Background="{DynamicResource SurfaceBackground}" 
                                 CornerRadius="5" 
                                 Padding="15" 
@@ -220,6 +227,3 @@
         </Panel>
     </Grid>
 </Window>
-
-
-

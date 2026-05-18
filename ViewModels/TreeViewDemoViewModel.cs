@@ -4,7 +4,7 @@ using RigorStarter.Shared.Models;
 
 namespace RigorStarter.ViewModels;
 
-public partial class TreeViewDemoViewModel : ObservableObject
+public partial class TreeViewDemoViewModel : SearchItemViewModel
 {
     [ObservableProperty]
     private ObservableCollection<TreeNodeItem> _items = new();

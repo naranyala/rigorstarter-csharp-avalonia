@@ -9,7 +9,7 @@ public enum MarkdownMode
     View,
 }
 
-public partial class MarkdownDemoViewModel : ObservableObject
+public partial class MarkdownDemoViewModel : SearchItemViewModel
 {
     [ObservableProperty]
     private string _markdownText = "# Hello Markdown\n\nStart editing to see changes.";

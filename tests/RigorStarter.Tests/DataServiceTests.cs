@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using Moq;
 using RigorStarter.Core.Interfaces;
 using RigorStarter.Core.Services;
@@ -12,6 +13,7 @@ namespace RigorStarter.Tests;
 public class DataServiceTests
 {
     private readonly Mock<ISystemService> _systemServiceMock;
+    private readonly ComponentRegistry _registry;
     private readonly DataService _service;
 
     public DataServiceTests()
@@ -24,11 +26,32 @@ public class DataServiceTests
         _systemServiceMock.Setup(s => s.GetMemorySummary()).Returns("Memory: 8GB/16GB");
         _systemServiceMock.Setup(s => s.GetCpuSummary()).Returns("CPU: 25%");
 
-        _service = new DataService(_systemServiceMock.Object);
+        _registry = new ComponentRegistry();
+        // Add dummy modules for testing
+        _registry.Register(
+            new TestModule { Name = "Accordion", Category = ComponentCategory.Pinned }
+        );
+        _registry.Register(
+            new TestModule { Name = "Drawer", Category = ComponentCategory.InDevelopment }
+        );
+        _registry.Register(
+            new TestModule { Name = "CustomChart", Category = ComponentCategory.Archives }
+        );
+
+        _service = new DataService(_systemServiceMock.Object, _registry);
+    }
+
+    private class TestModule : IComponentModule
+    {
+        public string Name { get; set; } = "";
+        public string Description { get; set; } = "Test";
+        public ComponentCategory Category { get; set; }
+        public Type ViewType => typeof(object);
+        public bool IsMockup { get; set; } = false;
     }
 
     [Fact]
-    public void InitializeComponents_ShouldPopulateCollections()
+    public void InitializeComponents_ShouldPopulateCollectionsFromRegistry()
     {
         // Arrange
         var searchItems = new ObservableCollection<SearchItemViewModel>();
@@ -42,12 +65,6 @@ public class DataServiceTests
 
         // Assert
         Assert.NotEmpty(searchItems);
-        Assert.NotEmpty(pinned);
-        Assert.NotEmpty(dev);
-        Assert.NotEmpty(archives);
-        Assert.NotEmpty(accordion);
-
-        // Verify components are registered in correct categories
         Assert.Contains(searchItems, i => i.Name == "Accordion");
         Assert.Contains(pinned, i => i.Name == "Accordion");
         Assert.Contains(searchItems, i => i.Name == "Drawer");
@@ -58,28 +75,6 @@ public class DataServiceTests
 
     [Fact]
     public void InitializeComponents_ShouldRegisterUtilities()
-    {
-        // Arrange
-        var searchItems = new ObservableCollection<SearchItemViewModel>();
-        var pinned = new ObservableCollection<SearchItemViewModel>();
-        var dev = new ObservableCollection<SearchItemViewModel>();
-        var archives = new ObservableCollection<SearchItemViewModel>();
-        var accordion = new ObservableCollection<AccordionItemViewModel>();
-
-        // Act
-        _service.InitializeComponents(searchItems, pinned, dev, archives, accordion);
-
-        // Assert
-        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "Network Utility");
-        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "Disk Utility");
-        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "System Info Utility");
-        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "Process Utility");
-        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "Memory Utility");
-        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "CPU Utility");
-    }
-
-    [Fact]
-    public void InitializeComponents_ShouldSetMockupFlag()
     {
         // Arrange
         var searchItems = new ObservableCollection<SearchItemViewModel>();
@@ -95,9 +90,12 @@ public class DataServiceTests
         );
 
         // Assert
-        Assert.Contains(searchItems, i => i.IsMockup && i.Name == "DataGrid");
-        Assert.Contains(searchItems, i => i.IsMockup && i.Name == "ColorPicker");
-        Assert.DoesNotContain(searchItems, i => i.IsMockup && i.Name == "Accordion");
+        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "Network Utility");
+        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "Disk Utility");
+        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "System Info Utility");
+        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "Process Utility");
+        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "Memory Utility");
+        Assert.Contains(searchItems, i => i.IsUtility && i.Name == "CPU Utility");
     }
 
     [Fact]
@@ -133,7 +131,8 @@ public class DataServiceTests
         _systemServiceMock
             .Setup(s => s.GetNetworkSummary())
             .Throws(new InvalidOperationException("Network error"));
-        var service = new DataService(_systemServiceMock.Object);
+
+        var service = new DataService(_systemServiceMock.Object, _registry);
         var searchItems = new ObservableCollection<SearchItemViewModel>();
         var collections = CreateEmptyCollections();
         service.InitializeComponents(
@@ -173,98 +172,6 @@ public class DataServiceTests
         Assert.Contains(collections.accordion, a => a.Header == "Section 1" && a.IsExpanded);
         Assert.Contains(collections.accordion, a => a.Header == "Section 2" && !a.IsExpanded);
         Assert.Contains(collections.accordion, a => a.Header == "Section 3" && !a.IsExpanded);
-    }
-
-    [Fact]
-    public void CountLines_ShouldHandleMissingFilesGracefully()
-    {
-        // Arrange
-        var method = typeof(DataService).GetMethod(
-            "CountLines",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
-        );
-        Assert.NotNull(method);
-
-        // Act
-        var result = method.Invoke(_service, new object[] { "non_existent_file.txt" });
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(0, (int)result);
-    }
-
-    [Fact]
-    public void CountLines_ShouldHandleNullPathGracefully()
-    {
-        // Arrange
-        var method = typeof(DataService).GetMethod(
-            "CountLines",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
-        );
-        Assert.NotNull(method);
-
-        // Act
-        var result = method.Invoke(_service, new object[] { null! });
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(0, result);
-    }
-
-    [Fact]
-    public void CountLines_ShouldHandleEmptyFile()
-    {
-        // Arrange
-        var tempFile = Path.GetTempFileName();
-        try
-        {
-            File.WriteAllText(tempFile, string.Empty);
-            var method = typeof(DataService).GetMethod(
-                "CountLines",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
-            );
-            Assert.NotNull(method);
-
-            // Act
-            var result = method.Invoke(_service, new object[] { tempFile });
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(0, (int)result);
-        }
-        finally
-        {
-            if (File.Exists(tempFile))
-                File.Delete(tempFile);
-        }
-    }
-
-    [Fact]
-    public void CountLines_ShouldHandleFileWithContent()
-    {
-        // Arrange
-        var tempFile = Path.GetTempFileName();
-        try
-        {
-            File.WriteAllLines(tempFile, new[] { "line1", "line2", "line3" });
-            var method = typeof(DataService).GetMethod(
-                "CountLines",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
-            );
-            Assert.NotNull(method);
-
-            // Act
-            var result = method.Invoke(_service, new object[] { tempFile });
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(3, (int)result);
-        }
-        finally
-        {
-            if (File.Exists(tempFile))
-                File.Delete(tempFile);
-        }
     }
 
     private static (

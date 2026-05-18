@@ -36,6 +36,7 @@
             <conv:SortIconMultiConverter x:Key="SortIconMultiConverter"/>
             <conv:ModeToButtonTextConverter x:Key="ModeToButtonTextConverter"/>
             <conv:ModeToVisibilityConverter x:Key="ModeToVisibilityConverter"/>
+            <conv:StringEqualsConverter x:Key="StringEqualsConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 

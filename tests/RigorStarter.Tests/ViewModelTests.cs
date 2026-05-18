@@ -98,29 +98,22 @@ public class ViewModelTests
         vm.SelectItemCommand.Execute(accordion);
 
         // Assert
-        Assert.True(vm.IsAccordionSelected);
-        Assert.False(vm.IsDrawerSelected);
+        Assert.Equal("Accordion", vm.SelectedItem?.ViewName);
         Assert.False(vm.IsUtilitySelected);
         Assert.True(vm.IsAnyItemSelected);
     }
 
     [Theory]
-    [InlineData("StatusBadge", nameof(MainWindowViewModel.IsStatusBadgeSelected))]
-    [InlineData("MetricCard", nameof(MainWindowViewModel.IsMetricCardSelected))]
-    public void NewComponents_ShouldUpdateSelectionProperties(
-        string componentName,
-        string propertyName
-    )
+    [InlineData("StatusBadge")]
+    [InlineData("MetricCard")]
+    public void NewComponents_ShouldUpdateSelectionProperties(string componentName)
     {
         var vm = CreateVM();
         var item = vm.SearchItems.First(i => i.Name == componentName);
 
         vm.SelectItemCommand.Execute(item);
 
-        var prop = typeof(MainWindowViewModel).GetProperty(propertyName);
-        Assert.NotNull(prop);
-        var value = (bool)prop.GetValue(vm)!;
-        Assert.True(value);
+        Assert.Equal(item.ViewName, vm.SelectedItem?.ViewName);
     }
 
     [Fact]
@@ -165,8 +158,7 @@ public class ViewModelTests
 
         // Assert
         Assert.False(vm.IsAnyItemSelected);
-        Assert.False(vm.IsAccordionSelected);
-        Assert.False(vm.IsDrawerSelected);
+        Assert.Null(vm.SelectedItem);
         Assert.False(vm.IsUtilitySelected);
     }
 

@@ -6,7 +6,7 @@ using RigorStarter.Shared.Models;
 
 namespace RigorStarter.ViewModels;
 
-public partial class TodoListViewModel : ObservableObject
+public partial class TodoListViewModel : SearchItemViewModel
 {
     private readonly ITodoService _todoService;
 

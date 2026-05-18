@@ -3,7 +3,7 @@ using RigorStarter.Shared.Utilities;
 
 namespace RigorStarter.ViewModels;
 
-public partial class MetricCardViewModel : ObservableObject
+public partial class MetricCardViewModel : SearchItemViewModel
 {
     [ObservableProperty]
     private string _title = "CPU Usage";

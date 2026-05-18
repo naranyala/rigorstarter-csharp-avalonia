@@ -1,3 +1,5 @@
+using System;
+using RigorStarter.Core.Interfaces;
 using RigorStarter.Shared.Models;
 using RigorStarter.Shared.Utilities;
 using RigorStarter.ViewModels;
@@ -19,7 +21,6 @@ public class ViewModelModelTests
         Assert.Equal(string.Empty, vm.SourceCode);
         Assert.Null(vm.ExecutionResult);
         Assert.Equal(ComponentCategory.InDevelopment, vm.Category);
-        Assert.Equal(0, vm.LinesOfCode);
         Assert.Null(vm.ExecuteAction);
         Assert.Equal(string.Empty, vm.ResultText);
         Assert.True(vm.ResultIsSuccess);
@@ -37,7 +38,6 @@ public class ViewModelModelTests
             IsMockup = false,
             SourceCode = "source",
             Category = ComponentCategory.Pinned,
-            LinesOfCode = 42,
         };
 
         Assert.Equal("Test", vm.Name);
@@ -47,7 +47,6 @@ public class ViewModelModelTests
         Assert.False(vm.IsMockup);
         Assert.Equal("source", vm.SourceCode);
         Assert.Equal(ComponentCategory.Pinned, vm.Category);
-        Assert.Equal(42, vm.LinesOfCode);
     }
 
     [Fact]

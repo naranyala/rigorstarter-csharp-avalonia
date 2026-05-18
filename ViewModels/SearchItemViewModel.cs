@@ -1,15 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using RigorStarter.Core.Interfaces;
 using RigorStarter.Shared.Models;
 using RigorStarter.Shared.Utilities;
 
 namespace RigorStarter.ViewModels;
-
-public enum ComponentCategory
-{
-    Pinned,
-    InDevelopment,
-    Archives,
-}
 
 public partial class SearchItemViewModel : ObservableObject
 {
@@ -38,7 +32,7 @@ public partial class SearchItemViewModel : ObservableObject
     private ComponentCategory _category = ComponentCategory.InDevelopment;
 
     [ObservableProperty]
-    private int _linesOfCode;
+    private string _viewName = string.Empty;
 
     public Action<SearchItemViewModel>? ExecuteAction { get; set; }
 

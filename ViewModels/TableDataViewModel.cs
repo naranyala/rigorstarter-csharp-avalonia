@@ -15,7 +15,7 @@ public enum SortDirection
     Descending,
 }
 
-public partial class TableDataViewModel : ObservableObject
+public partial class TableDataViewModel : SearchItemViewModel
 {
     [ObservableProperty]
     private ObservableCollection<TableDataRow> _items = new();

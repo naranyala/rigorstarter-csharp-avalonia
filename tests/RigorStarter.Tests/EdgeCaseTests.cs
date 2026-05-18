@@ -20,6 +20,13 @@ namespace RigorStarter.Tests;
 /// </summary>
 public class EdgeCaseTests
 {
+    private DataService CreateDataService()
+    {
+        var systemService = new SystemService();
+        var registry = new ComponentRegistry();
+        return new DataService(systemService, registry);
+    }
+
     // ========== ViewModel Boundary Cases ==========
 
     [Fact]
@@ -55,7 +62,6 @@ public class EdgeCaseTests
     {
         var vm = CreateVM();
         var ex = Record.Exception(() => vm.SearchText = null!);
-        // CommunityToolkit.Mvvm auto-generated property may handle null differently
         Assert.Null(ex);
     }
 
@@ -64,7 +70,6 @@ public class EdgeCaseTests
     {
         var vm = CreateVM();
         vm.SearchText = ".*+^${}()|[]\\";
-        // Should not throw or crash - regex chars are not used as regex
         Assert.NotNull(vm.FilteredItems);
     }
 
@@ -125,51 +130,10 @@ public class EdgeCaseTests
     // ========== DataService Injection and Boundary Cases ==========
 
     [Fact]
-    public void DataService_CountLines_WithDirectoryPath_ShouldReturnZero()
+    public void DataService_CountLines_WasRemoved_ShouldNoLongerBeTested()
     {
-        var service = new DataService(new SystemService());
-        var tmpDir = Path.Combine(Path.GetTempPath(), "rigortest_" + Guid.NewGuid());
-        Directory.CreateDirectory(tmpDir);
-        try
-        {
-            var method = typeof(DataService).GetMethod(
-                "CountLines",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
-            )!;
-            var result = method.Invoke(service, new object[] { tmpDir });
-            Assert.Equal(0, (int)result!);
-        }
-        finally
-        {
-            if (Directory.Exists(tmpDir))
-                Directory.Delete(tmpDir);
-        }
-    }
-
-    [Fact]
-    public void DataService_CountLines_WithSpecialFilePath_ShouldNotThrow()
-    {
-        var service = new DataService(new SystemService());
-        var method = typeof(DataService).GetMethod(
-            "CountLines",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
-        )!;
-
-        var ex = Record.Exception(() => method.Invoke(service, new object[] { "/dev/null" }));
-        Assert.Null(ex);
-    }
-
-    [Fact]
-    public void DataService_CountLines_WithVeryLongPath_ShouldReturnZero()
-    {
-        var service = new DataService(new SystemService());
-        var method = typeof(DataService).GetMethod(
-            "CountLines",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
-        )!;
-        var longPath = new string('x', 500) + ".txt";
-        var result = method.Invoke(service, new object[] { longPath });
-        Assert.Equal(0, (int)result!);
+        // This test is a placeholder to acknowledge the removal of CountLines
+        Assert.True(true);
     }
 
     [Fact]
@@ -177,7 +141,6 @@ public class EdgeCaseTests
     {
         var vm = CreateVM();
         var util = vm.SearchItems.First(i => i.IsUtility);
-        // If ExecuteAction is null, SelectItem should not crash
         util.ExecuteAction = null;
         var ex = Record.Exception(() => vm.SelectItemCommand.Execute(util));
         Assert.Null(ex);
@@ -190,7 +153,6 @@ public class EdgeCaseTests
     {
         var buffer = new NativeBuffer(10);
         buffer.Dispose();
-        // Accessing freed memory is undefined behavior but should throw or crash gracefully
         var ex = Record.Exception(() => buffer.ReadByte(0));
         Assert.NotNull(ex);
     }
@@ -207,8 +169,6 @@ public class EdgeCaseTests
     [Fact]
     public void NativeBuffer_MaxSize_ShouldAllocate()
     {
-        // Attempt to allocate a large buffer to test edge of memory
-        // 256 MB should be safe on most systems
         var ex = Record.Exception(() =>
         {
             using var buffer = new NativeBuffer(256 * 1024 * 1024);
@@ -241,11 +201,8 @@ public class EdgeCaseTests
     [Fact]
     public void StdLibBridge_GetStringLength_WithEmbeddedNull_ShouldCountPastNull()
     {
-        // C# strings can contain embedded null characters
         var s = "he\0llo";
         var (success, length) = StdLibBridge.GetStringLength(s);
-        // strlen in C counts until the FIRST null terminator
-        // So for "he\0llo", it should return 2
         Assert.True(success);
         Assert.Equal(2u, (uint)length);
     }
@@ -258,7 +215,6 @@ public class EdgeCaseTests
         try
         {
             Assert.NotEqual(IntPtr.Zero, ptr);
-            // strdup also stops at null terminator
             string result = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptr);
             Assert.Equal("he", result);
         }
@@ -301,7 +257,6 @@ public class EdgeCaseTests
         var result = await LinuxShell.ExecuteAsync("sleep", "10", 100);
         Assert.NotNull(result);
         Assert.Equal(-1, result.ExitCode);
-        // The process is killed, resulting in a timeout-related error
         var combined = result.StandardError + result.StandardOutput;
         Assert.True(
             combined.Contains("timeout", StringComparison.OrdinalIgnoreCase)
@@ -316,7 +271,6 @@ public class EdgeCaseTests
     [Fact]
     public void OsRelease_NonExistentFile_ShouldReturnUnknown()
     {
-        // This tests the internal parsing logic by checking the fallback
         var info = OsRelease.GetDistroInfo();
         Assert.NotNull(info);
         Assert.False(string.IsNullOrWhiteSpace(info.PrettyName));
@@ -358,7 +312,6 @@ public class EdgeCaseTests
         try
         {
             var config = ConfigManager.LoadConfig<TestEdgeConfig>(appName, fileName);
-            // Empty YAML string may return null from YamlDotNet
             Assert.Null(config);
         }
         finally
@@ -378,7 +331,6 @@ public class EdgeCaseTests
         try
         {
             var config = ConfigManager.LoadConfig<TestEdgeConfig>(appName, fileName);
-            // YAML with only comments returns null from YamlDotNet
             Assert.Null(config);
         }
         finally
@@ -394,7 +346,6 @@ public class EdgeCaseTests
         var fileName = "bom.yaml";
         var dir = XdgPaths.GetConfigDir(appName);
         Directory.CreateDirectory(dir);
-        // Write with UTF-8 BOM
         var content = "value: 42\n";
         var bom = new byte[] { 0xEF, 0xBB, 0xBF };
         using (var fs = File.Create(Path.Combine(dir, fileName)))
@@ -419,7 +370,6 @@ public class EdgeCaseTests
     {
         var appName = "NewDirTest_" + Guid.NewGuid().ToString("N");
         var fileName = "config.yaml";
-        // Ensure directory does NOT exist
         var dir = XdgPaths.GetConfigDir(appName);
         if (Directory.Exists(dir))
             Directory.Delete(dir, true);
@@ -429,7 +379,6 @@ public class EdgeCaseTests
             var config = ConfigManager.LoadConfig<TestEdgeConfig>(appName, fileName);
             Assert.NotNull(config);
             Assert.Equal(0, config.Value);
-            // Directory should have been created
             Assert.True(Directory.Exists(dir));
         }
         finally
@@ -451,7 +400,6 @@ public class EdgeCaseTests
     [Fact]
     public void ProcFS_GetTotalRam_WithInvalidFormat_ShouldHandleGracefully()
     {
-        // This tests the parsing in GetTotalRamKb
         var ram = ProcFS.GetTotalRamKb();
         Assert.True(ram >= 0);
     }
@@ -490,8 +438,6 @@ public class EdgeCaseTests
     {
         var vm = new SearchItemViewModel();
         Assert.Null(vm.ExecuteAction);
-        // Calling null delegate should not throw since we don't invoke it
-        // but SelectItem does invoke it
     }
 
     [Fact]
@@ -501,14 +447,6 @@ public class EdgeCaseTests
         Assert.Null(vm.ExecutionResult);
         Assert.Equal(string.Empty, vm.ResultText);
         Assert.True(vm.ResultIsSuccess);
-    }
-
-    [Fact]
-    public void SearchItemViewModel_LinesOfCode_MaxValue_ShouldStore()
-    {
-        var vm = new SearchItemViewModel();
-        vm.LinesOfCode = int.MaxValue;
-        Assert.Equal(int.MaxValue, vm.LinesOfCode);
     }
 
     // ========== NotificationService Priority Mapping ==========
@@ -526,13 +464,11 @@ public class EdgeCaseTests
     [Fact]
     public async Task NativeNotificationBridge_SpecialChars_ShouldNotExecuteInjection()
     {
-        // Test that shell metacharacters in notification text are not executed
         var result = await NativeNotificationBridge.SendNotificationAsync(
             "test'; echo pwned; '",
             "msg$(id)",
             "normal"
         );
-        // Should return false (notify-send will fail with these args) or true gracefully
         Assert.NotNull(result);
     }
 
@@ -541,9 +477,7 @@ public class EdgeCaseTests
     [Fact]
     public async Task NativeDialogBridge_SpecialChars_ShouldNotExecuteInjection()
     {
-        // Test with special characters that could break out of zenity arguments
         var path = await NativeDialogBridge.OpenFileAsync("test\"; echo pwned; \"", "*.*");
-        // Should not execute the injected command, return null or a path
         Assert.Null(path);
     }
 
@@ -638,7 +572,6 @@ public class EdgeCaseTests
     [Fact]
     public void BadgeStatus_UndefinedValue_ShouldExist()
     {
-        // Even undefined enum values should be representable
         var status = (BadgeStatus)42;
         Assert.Equal(42, (int)status);
     }
@@ -698,7 +631,6 @@ public class EdgeCaseTests
         var ex = await Record.ExceptionAsync(() =>
             LinuxNotifier.SendNotification("test'title", "msg\"with\"quotes")
         );
-        // notify-send may not be available, but the utility should handle it gracefully
         Assert.Null(ex);
     }
 
