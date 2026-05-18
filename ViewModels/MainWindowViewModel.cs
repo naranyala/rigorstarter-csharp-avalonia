@@ -45,6 +45,8 @@ public partial class MainWindowViewModel : ObservableObject
     public bool IsTodoListSelected => SelectedItem?.Name == "TodoList";
     public bool IsTodoListJsonSelected => SelectedItem?.Name == "TodoListJson";
     public bool IsTreeViewDemoSelected => SelectedItem?.Name == "TreeViewDemo";
+    public bool IsTableDataSelected => SelectedItem?.Name == "Table Data";
+    public bool IsMarkdownDemoSelected => SelectedItem?.Name == "Markdown Demo";
     public bool IsUtilitySelected => SelectedItem?.IsUtility ?? false;
     public bool IsMockupSelected => SelectedItem?.IsMockup ?? false;
     public bool IsAnyItemSelected => SelectedItem != null;
@@ -122,21 +124,11 @@ public partial class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(IsTodoListSelected));
         OnPropertyChanged(nameof(IsTodoListJsonSelected));
         OnPropertyChanged(nameof(IsTreeViewDemoSelected));
+        OnPropertyChanged(nameof(IsTableDataSelected));
+        OnPropertyChanged(nameof(IsMarkdownDemoSelected));
         OnPropertyChanged(nameof(IsUtilitySelected));
         OnPropertyChanged(nameof(IsMockupSelected));
         OnPropertyChanged(nameof(IsAnyItemSelected));
-    }
-
-    [RelayCommand]
-    private void Exit()
-    {
-        if (
-            Application.Current?.ApplicationLifetime
-            is IClassicDesktopStyleApplicationLifetime desktop
-        )
-        {
-            desktop.Shutdown();
-        }
     }
 
     [RelayCommand]
@@ -153,9 +145,23 @@ public partial class MainWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(IsTodoListSelected));
         OnPropertyChanged(nameof(IsTodoListJsonSelected));
         OnPropertyChanged(nameof(IsTreeViewDemoSelected));
+        OnPropertyChanged(nameof(IsTableDataSelected));
+        OnPropertyChanged(nameof(IsMarkdownDemoSelected));
         OnPropertyChanged(nameof(IsUtilitySelected));
         OnPropertyChanged(nameof(IsMockupSelected));
         OnPropertyChanged(nameof(IsAnyItemSelected));
+    }
+
+    [RelayCommand]
+    private void Exit()
+    {
+        if (
+            Application.Current?.ApplicationLifetime
+            is IClassicDesktopStyleApplicationLifetime desktop
+        )
+        {
+            desktop.Shutdown();
+        }
     }
 
     partial void OnSearchTextChanged(string value)

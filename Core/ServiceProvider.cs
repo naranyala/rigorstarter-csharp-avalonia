@@ -36,6 +36,8 @@ public static class ServiceProvider
         _services[typeof(TodoListViewModel)] = new TodoListViewModel(todoService);
         _services[typeof(TodoListJsonViewModel)] = new TodoListJsonViewModel(todoServiceJson);
         _services[typeof(TreeViewDemoViewModel)] = new TreeViewDemoViewModel();
+        _services[typeof(TableDataViewModel)] = new TableDataViewModel();
+        _services[typeof(MarkdownDemoViewModel)] = new MarkdownDemoViewModel();
 
         _services[typeof(MainWindowViewModel)] = new MainWindowViewModel(
             dataService,

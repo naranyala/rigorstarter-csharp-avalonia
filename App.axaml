@@ -33,8 +33,12 @@
             <conv:SuccessToBorderConverter x:Key="SuccessToBorderConverter"/>
             <conv:SuccessToTextConverter x:Key="SuccessToTextConverter"/>
             <conv:ThemeIconConverter x:Key="ThemeIconConverter"/>
+            <conv:SortIconMultiConverter x:Key="SortIconMultiConverter"/>
+            <conv:ModeToButtonTextConverter x:Key="ModeToButtonTextConverter"/>
+            <conv:ModeToVisibilityConverter x:Key="ModeToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
+
 
     <Application.Styles>
         <FluentTheme />

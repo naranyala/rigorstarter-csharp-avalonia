@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RigorStarter.ViewModels"
+             x:Class="RigorStarter.Components.MarkdownDemo"
+             x:DataType="vm:MainWindowViewModel">
+    <Border x:Name="ContentRoot"
+            x:DataType="vm:MarkdownDemoViewModel"
+            x:CompileBindings="False"
+            Background="{DynamicResource SurfaceBackground}"
+            CornerRadius="8"
+            Padding="20"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1"
+            Width="600">
+        <StackPanel Spacing="15">
+            <Grid ColumnDefinitions="*, Auto">
+                <TextBlock Text="Markdown Editor"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource PrimaryText}" />
+                
+                <Button Grid.Column="1" 
+                        Command="{Binding ToggleModeCommand}"
+                        Content="{Binding CurrentMode, Converter={StaticResource ModeToButtonTextConverter}}"
+                        Background="{DynamicResource PrimaryText}"
+                        Foreground="{DynamicResource SurfaceBackground}"
+                        Padding="10,5" />
+            </Grid>
+
+            <Grid RowDefinitions="*, *" Height="300">
+                <!-- Edit Mode -->
+                <TextBox Grid.Row="0"
+                         Text="{Binding MarkdownText, Mode=TwoWay}"
+                         AcceptsReturn="True"
+                         AcceptsTab="True"
+                         FontFamily="Courier New"
+                         IsVisible="{Binding CurrentMode, Converter={StaticResource ModeToVisibilityConverter}, ConverterParameter=Edit}"
+                         Watermark="Enter markdown here..." />
+
+                <!-- View Mode -->
+                <ScrollViewer Grid.Row="1"
+                              IsVisible="{Binding CurrentMode, Converter={StaticResource ModeToVisibilityConverter}, ConverterParameter=View}">
+                    <TextBlock Text="{Binding RenderedText}"
+                               Foreground="{DynamicResource PrimaryText}"
+                               TextWrapping="Wrap" />
+                </ScrollViewer>
+            </Grid>
+        </StackPanel>
+    </Border>
+</UserControl>

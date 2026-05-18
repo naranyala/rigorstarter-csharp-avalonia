@@ -184,6 +184,28 @@ public class DataService : IDataService
             "Components/TreeViewDemo.axaml",
             "Components/TreeViewDemo.axaml.cs"
         );
+        AddComponent(
+            searchItems,
+            pinnedItems,
+            inDevelopmentItems,
+            archivesItems,
+            "Table Data",
+            "A sortable data table demo",
+            ComponentCategory.InDevelopment,
+            "Components/TableData.axaml",
+            "Components/TableData.axaml.cs"
+        );
+        AddComponent(
+            searchItems,
+            pinnedItems,
+            inDevelopmentItems,
+            archivesItems,
+            "Markdown Demo",
+            "A markdown editor and viewer",
+            ComponentCategory.InDevelopment,
+            "Components/MarkdownDemo.axaml",
+            "Components/MarkdownDemo.axaml.cs"
+        );
 
         // Utilities - Now using the injected ISystemService instead of static calls
         AddUtility(

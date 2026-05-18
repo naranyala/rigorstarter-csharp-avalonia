@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:RigorStarter.ViewModels"
+             xmlns:models="using:RigorStarter.Shared.Models"
+             xmlns:conv="using:RigorStarter.Converters"
+             x:Class="RigorStarter.Components.TableData"
+             x:DataType="vm:MainWindowViewModel">
+    <Border x:Name="ContentRoot"
+            x:DataType="vm:TableDataViewModel"
+            x:CompileBindings="False"
+            Background="{DynamicResource SurfaceBackground}"
+            CornerRadius="8"
+            Padding="20"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1"
+            Width="600">
+        <StackPanel Spacing="15">
+            <TextBlock Text="Sortable Data Table"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource PrimaryText}" />
+
+            <Grid ColumnDefinitions="*, *, *, *" RowDefinitions="Auto, *" Margin="0,10">
+                <!-- Headers -->
+                <Button Grid.Column="0" Command="{Binding SortCommand}" CommandParameter="Name" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Name" FontWeight="Bold" />
+                        <TextBlock Margin="5,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource SortIconMultiConverter}" ConverterParameter="Name">
+                                    <Binding Path="CurrentSortColumn" />
+                                    <Binding Path="CurrentSortDirection" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="1" Command="{Binding SortCommand}" CommandParameter="Value" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Value" FontWeight="Bold" />
+                        <TextBlock Margin="5,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource SortIconMultiConverter}" ConverterParameter="Value">
+                                    <Binding Path="CurrentSortColumn" />
+                                    <Binding Path="CurrentSortDirection" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="2" Command="{Binding SortCommand}" CommandParameter="Status" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Status" FontWeight="Bold" />
+                        <TextBlock Margin="5,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource SortIconMultiConverter}" ConverterParameter="Status">
+                                    <Binding Path="CurrentSortColumn" />
+                                    <Binding Path="CurrentSortDirection" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="3" Command="{Binding SortCommand}" CommandParameter="Category" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Category" FontWeight="Bold" />
+                        <TextBlock Margin="5,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource SortIconMultiConverter}" ConverterParameter="Category">
+                                    <Binding Path="CurrentSortColumn" />
+                                    <Binding Path="CurrentSortDirection" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+
+                <!-- Data Rows -->
+                <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}" Margin="0,10,0,0">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:TableDataRow">
+                            <Grid ColumnDefinitions="*, *, *, *" Margin="0,5">
+                                <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="{DynamicResource PrimaryText}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Value}" Foreground="{DynamicResource PrimaryText}" />
+                                <TextBlock Grid.Column="2" Text="{Binding Status}" Foreground="{DynamicResource PrimaryText}" />
+                                <TextBlock Grid.Column="3" Text="{Binding Category}" Foreground="{DynamicResource PrimaryText}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </StackPanel>
+    </Border>
+</UserControl>
+
