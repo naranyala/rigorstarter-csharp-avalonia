@@ -16,10 +16,12 @@ public static class ServiceProvider
         var systemService = new SystemService();
         var dataService = new DataService(systemService);
         var themeService = new ThemeService();
+        var memoryService = new NativeMemoryService();
 
         _services[typeof(ISystemService)] = systemService;
         _services[typeof(IDataService)] = dataService;
         _services[typeof(IThemeService)] = themeService;
+        _services[typeof(INativeMemoryService)] = memoryService;
 
         // Register ViewModels
         _services[typeof(MainWindowViewModel)] = new MainWindowViewModel(dataService, themeService);

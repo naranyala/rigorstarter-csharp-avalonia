@@ -22,8 +22,9 @@ tar -czf "./build/$ARCHIVE_NAME" \
     .
 
 if [ $? -eq 0 ]; then
+    FILE_SIZE=$(du -h "./build/$ARCHIVE_NAME" | cut -f1)
     echo "Successfully archived to ./build/$ARCHIVE_NAME"
-    ls -lh "./build/$ARCHIVE_NAME"
+    echo "Final archive size: $FILE_SIZE"
 else
     echo "Error occurred during archiving."
     exit 1
