@@ -1,19 +1,35 @@
 # Project Architecture
 
-RigorStarter is built using the Avalonia UI framework and follows the Model-View-ViewModel (MVVM) architectural pattern.
+RigorStarter is a professional showcase application built using C# and the Avalonia UI framework, following a strict Model-View-ViewModel (MVVM) pattern and a layered architecture.
 
-## Directory Structure
+## Architectural Layers
 
-- **/Components**: Contains reusable UI controls. Each component consists of an .axaml file for layout and an .axaml.cs file for logic.
-- **/Views**: Contains the main window and page-level layouts.
-- **/ViewModels**: contains the application logic. It separates the UI state from the view.
-- **/Utilities**: Contains system-level utilities that interact with the host OS to gather hardware and software information.
-- **/Converters**: Contains IValueConverter implementations used to map data states to visual properties (e.g., boolean to color).
-- **/tests**: Contains the xUnit test suite for validating business logic and utilities.
+The application is divided into three primary layers to ensure scalability, maintainability, and testability.
+
+### 1. Presentation Layer
+This layer handles the user interface and user experience.
+- **Views**: XAML-based layouts defining the visual structure.
+- **ViewModels**: Logic that bridges the Views and the Core layer. It manages UI state and handles user commands.
+- **Converters**: Logic to map data states to visual properties (e.g., status to color).
+
+### 2. Core Layer
+The brain of the application, containing business logic and orchestration.
+- **Interfaces**: Defines the contracts for services (e.g., IDataService, ISystemService), allowing for easy swapping of implementations.
+- **Services**: Implementation of business logic and service coordination.
+- **ServiceProvider**: A lightweight dependency injection (DI) container that manages singleton lifetimes and provides services to the ViewModels.
+
+### 3. Shared Layer
+Cross-cutting concerns and low-level utilities used across the entire application.
+- **Utilities**: OS-level diagnostic tools that interact with the host system to gather hardware and software information.
+- **Models**: Common data structures (e.g., UtilityResult) used for communication between layers.
+
+## Dependency Rule
+To prevent circular dependencies and maintain a clean architecture, the following rules are enforced:
+Presentation $\rightarrow$ Core $\rightarrow$ Shared.
+The Shared layer must never depend on Core or Presentation.
 
 ## Data Flow
-
-1. The `ViewModelDataService` initializes the list of available components and utilities.
-2. `MainWindowViewModel` manages the selection state and search filtering.
-3. The `MainWindow` view binds to these properties to determine which component or utility detail to render.
-4. Utilities are executed via commands, and their results are piped back to the UI through the `SearchItemViewModel`.
+1. **Initialization**: The `ServiceProvider` instantiates services and the `MainWindowViewModel`.
+2. **Data Loading**: `DataService` populates the component and utility registries.
+3. **Interaction**: The user interacts with the View $\rightarrow$ triggers a Command in the ViewModel $\rightarrow$ calls a method in a Core Service $\rightarrow$ utilizes a Shared Utility.
+4. **Feedback**: Results flow back through the ViewModel to the View via data binding.

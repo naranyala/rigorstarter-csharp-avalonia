@@ -1,20 +1,21 @@
 # RigorStarter Avalonia
 
-RigorStarter is a professional component showcase and system utility dashboard built with C# and the Avalonia UI framework. It demonstrates a modular architecture for building reusable UI components and integrating system-level diagnostics.
+RigorStarter is a professional component showcase and system utility dashboard built with C# and the Avalonia UI framework. It demonstrates a scalable, modular architecture for building reusable UI components and integrating system-level diagnostics.
 
 ## Features
 
-- Component Dashboard: A searchable registry of UI components with live previews.
+- Component Dashboard: A searchable registry of UI components with live previews and source code access.
 - System Utilities: Integrated tools for monitoring CPU, Memory, Disk, and Network status.
-- MVVM Architecture: Strict separation of concerns using the CommunityToolkit.Mvvm.
-- Rigorous Testing: Comprehensive xUnit test suite covering utilities and business logic.
+- Layered Architecture: Strict separation of concerns using a Core/Shared/Presentation model and a lightweight Dependency Injection system.
+- Comprehensive Testing: Full xUnit test suite covering utilities, business logic, and UI state transitions.
 
 ## Project Structure
 
-- /Components: Reusable UI controls.
-- /ViewModels: Application state and business logic.
+- /Core: Business logic, service interfaces, and the DI container.
+- /Shared: Low-level OS utilities and common data models.
+- /ViewModels: Application state and presentation logic.
 - /Views: Avalonia XAML views.
-- /Utilities: OS-level diagnostic tools.
+- /Components: Reusable UI controls.
 - /docs: Technical documentation.
 - /tests: Test suite.
 

@@ -13,6 +13,7 @@ namespace RigorStarter.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
     private readonly IDataService _dataService;
+    private readonly IThemeService _themeService;
 
     [ObservableProperty]
     private bool _isSearchPanelOpen;
@@ -50,9 +51,10 @@ public partial class MainWindowViewModel : ObservableObject
     public ObservableCollection<SearchItemViewModel> InDevelopmentItems { get; } = new();
     public ObservableCollection<SearchItemViewModel> ArchivesItems { get; } = new();
 
-    public MainWindowViewModel(IDataService dataService)
+    public MainWindowViewModel(IDataService dataService, IThemeService themeService)
     {
         _dataService = dataService;
+        _themeService = themeService;
         _dataService.InitializeComponents(
             SearchItems,
             PinnedItems,
@@ -77,10 +79,9 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private void ToggleTheme()
     {
-        IsDarkTheme = !IsDarkTheme;
-        Application.Current!.RequestedThemeVariant = IsDarkTheme
-            ? ThemeVariant.Dark
-            : ThemeVariant.Light;
+        _themeService.IsDarkTheme = !_themeService.IsDarkTheme;
+        _themeService.ApplyTheme();
+        IsDarkTheme = _themeService.IsDarkTheme;
     }
 
     [RelayCommand]

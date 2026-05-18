@@ -1,33 +1,40 @@
 # Testing Framework
 
-The project uses a rigorous testing suite based on xUnit to ensure stability across different system environments.
+RigorStarter employs a comprehensive testing strategy using xUnit to ensure system stability and correctness across various operating system environments.
 
-## Test Categories
+## Test Suite Structure
 
-### ViewModel Tests
-Focuses on the logic within `MainWindowViewModel`. 
-- Search filtering (case-insensitivity, empty results).
-- State transitions (selecting items, returning to dashboard).
+### 1. ViewModel Tests
+Validates the presentation logic and state transitions.
+- **Search Filtering**: Tests case-insensitivity, partial matches, and empty result handling.
+- **Navigation State**: Verifies that selecting components and returning to the dashboard updates the UI state properties correctly.
+- **Feature Toggles**: Validates the theme switching logic and state persistence.
 
-### Utility Tests
-Focuses on the `Utilities` directory.
-- Validates that system calls return non-empty summaries.
-- Ensures that `UtilityResult` objects are correctly formed.
-- Checks for resilience against missing system data.
+### 2. Core Service Tests
+Validates the business logic and dependency injection.
+- **ServiceProvider**: Ensures that all required services are correctly registered and retrieved as the appropriate types.
+- **DataService**: Verifies the correct initialization of the component registry and the accuracy of file line counting.
 
-### Converter Tests
-Validates that `IValueConverter` implementations map data types to the correct Avalonia Brushes.
+### 3. System Utility Tests
+Tests the lowest level of the application.
+- **Output Validation**: Ensures that OS-level calls return non-null, formatted summaries.
+- **Resilience**: Checks that the utilities handle missing system data or unexpected OS responses without crashing.
 
-### Data Service Tests
-Tests the `ViewModelDataService` for correct component initialization and file line counting.
+### 4. Converter Tests
+Validates the mapping of data states to Avalonia UI properties.
+- Ensures that `BadgeStatus` values map to the correct `IBrush` colors.
+- Validates that boolean states map to correct borders and colors for success/failure states.
 
-## How to Run Tests
+## Execution
 
-Execute the following command from the project root:
+Run the complete test suite from the project root:
 
 ```bash
 dotnet test tests/RigorStarter.Tests/RigorStarter.Tests.csproj
 ```
 
-## Writing New Tests
-When adding a new utility or ViewModel property, add a corresponding test case in the `tests/RigorStarter.Tests` directory. Focus on edge cases such as null inputs, empty strings, and unexpected OS responses.
+## Guidelines for New Tests
+When introducing a new feature or utility:
+1. Create a corresponding test class in `tests/RigorStarter.Tests`.
+2. Focus on edge cases: null inputs, empty strings, and unexpected system responses.
+3. Use `[Theory]` for data-driven tests to cover multiple input scenarios in a single method.

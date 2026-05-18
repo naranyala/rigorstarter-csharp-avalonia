@@ -15,12 +15,14 @@ public static class ServiceProvider
         // Register Services (Singletons)
         var systemService = new SystemService();
         var dataService = new DataService(systemService);
+        var themeService = new ThemeService();
 
         _services[typeof(ISystemService)] = systemService;
         _services[typeof(IDataService)] = dataService;
+        _services[typeof(IThemeService)] = themeService;
 
         // Register ViewModels
-        _services[typeof(MainWindowViewModel)] = new MainWindowViewModel(dataService);
+        _services[typeof(MainWindowViewModel)] = new MainWindowViewModel(dataService, themeService);
     }
 
     public static T GetService<T>()

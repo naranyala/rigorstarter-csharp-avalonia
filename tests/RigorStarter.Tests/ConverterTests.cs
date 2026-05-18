@@ -22,10 +22,10 @@ public class ConverterTests
     }
 
     [Theory]
-    [InlineData(RigorStarter.Utilities.BadgeStatus.Info)]
-    [InlineData(RigorStarter.Utilities.BadgeStatus.Success)]
-    [InlineData(RigorStarter.Utilities.BadgeStatus.Warning)]
-    [InlineData(RigorStarter.Utilities.BadgeStatus.Error)]
+    [InlineData(RigorStarter.Shared.Utilities.BadgeStatus.Info)]
+    [InlineData(RigorStarter.Shared.Utilities.BadgeStatus.Success)]
+    [InlineData(RigorStarter.Shared.Utilities.BadgeStatus.Warning)]
+    [InlineData(RigorStarter.Shared.Utilities.BadgeStatus.Error)]
     [InlineData(null)]
     public void BadgeStatusToColorConverter_ShouldMapCorrectColors(object? input)
     {

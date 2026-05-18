@@ -1,4 +1,5 @@
 using System.Linq;
+using RigorStarter.Core;
 using RigorStarter.ViewModels;
 using Xunit;
 
@@ -6,6 +7,8 @@ namespace RigorStarter.Tests;
 
 public class ViewModelTests
 {
+    private MainWindowViewModel CreateVM() => ServiceProvider.GetService<MainWindowViewModel>();
+
     [Theory]
     [InlineData("accordion")] // Case insensitive
     [InlineData("Card")] // Exact match
@@ -14,7 +17,7 @@ public class ViewModelTests
     [InlineData("")] // Empty search (Total items)
     public void Search_ShouldFilterCorrectly(string query)
     {
-        var vm = new MainWindowViewModel();
+        var vm = CreateVM();
         vm.SearchText = query;
 
         // We can't assert exact count without knowing current dataset,
@@ -36,7 +39,7 @@ public class ViewModelTests
     public void Selection_ShouldUpdateCorrectStateProperties()
     {
         // Arrange
-        var vm = new MainWindowViewModel();
+        var vm = CreateVM();
         var accordion = vm.SearchItems.First(i => i.Name == "Accordion");
 
         // Act
@@ -57,7 +60,7 @@ public class ViewModelTests
         string propertyName
     )
     {
-        var vm = new MainWindowViewModel();
+        var vm = CreateVM();
         var item = vm.SearchItems.First(i => i.Name == componentName);
 
         vm.SelectItemCommand.Execute(item);
@@ -72,7 +75,7 @@ public class ViewModelTests
     public void GoToDashboard_ShouldResetAllSelectionStates()
     {
         // Arrange
-        var vm = new MainWindowViewModel();
+        var vm = CreateVM();
         var accordion = vm.SearchItems.First(i => i.Name == "Accordion");
         vm.SelectItemCommand.Execute(accordion);
         Assert.True(vm.IsAnyItemSelected);
@@ -85,5 +88,25 @@ public class ViewModelTests
         Assert.False(vm.IsAccordionSelected);
         Assert.False(vm.IsDrawerSelected);
         Assert.False(vm.IsUtilitySelected);
+    }
+
+    [Fact]
+    public void ToggleTheme_ShouldCycleDarkThemeState()
+    {
+        // Arrange
+        var vm = CreateVM();
+        bool initialTheme = vm.IsDarkTheme;
+
+        // Act
+        vm.ToggleThemeCommand.Execute(null);
+
+        // Assert
+        Assert.NotEqual(initialTheme, vm.IsDarkTheme);
+
+        // Act again
+        vm.ToggleThemeCommand.Execute(null);
+
+        // Assert back to initial
+        Assert.Equal(initialTheme, vm.IsDarkTheme);
     }
 }
